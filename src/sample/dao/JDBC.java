@@ -1,4 +1,6 @@
 package sample.dao;
+import sample.model.Contact;
+
 import java.sql.*;
 
 public class JDBC {
@@ -35,6 +37,7 @@ public class JDBC {
             System.out.println("Error:" + e.getMessage());
         }
     }
+
 
     public static void testQuery() {
         String query = "SELECT * FROM contacts where Contact_ID = 1;";
