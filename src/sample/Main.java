@@ -11,14 +11,16 @@ import sample.dao.impl.ContactDaoImpl;
 import sample.model.Appointment;
 import sample.model.Contact;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view/loginForm.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("view/loginForm.fxml")));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 900, 600));
         primaryStage.show();
     }
 

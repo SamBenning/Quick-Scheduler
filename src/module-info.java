@@ -8,5 +8,6 @@ module C195 {
 
     exports sample;
     exports sample.controller;
+    exports sample.controller.customerControllers;
     opens sample.controller to javafx.graphics;
 }

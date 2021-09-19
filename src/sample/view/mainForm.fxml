@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainController">
+   <children>
+      <TabPane prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Appointments">
+            <content>
+              <AnchorPane>
+                     <children>
+                        <VBox>
+                           <children>
+                              <TableView fx:id="appTableView">
+                                <columns>
+                                  <TableColumn fx:id="appIdCol" prefWidth="100.0" text="Appointment_ID" />
+                                  <TableColumn fx:id="appDescriptionCol" prefWidth="70.0" text="Description" />
+                                    <TableColumn fx:id="appLocationCol" prefWidth="54.0" text="Location" />
+                                    <TableColumn fx:id="appTypeCol" prefWidth="50.0" text="Type" />
+                                    <TableColumn fx:id="appStartCol" prefWidth="75.0" text="Start" />
+                                    <TableColumn fx:id="appEndCol" prefWidth="75.0" text="End" />
+                                    <TableColumn fx:id="appCustomerCol" prefWidth="75.0" text="Customer" />
+                                    <TableColumn fx:id="appUserCol" prefWidth="75.0" text="User" />
+                                    <TableColumn fx:id="appContactCol" prefWidth="75.0" text="Contact" />
+                                </columns>
+                              </TableView>
+                              <ButtonBar prefHeight="40.0" prefWidth="351.0">
+                                 <buttons>
+                                    <Button fx:id="addAppButton" mnemonicParsing="false" onAction="#addAppHandler" text="Add" />
+                                    <Button fx:id="modifyAppButton" mnemonicParsing="false" onAction="#modifyAppHandler" text="Modify" />
+                                  <Button fx:id="deleteAppButton" mnemonicParsing="false" onAction="#deleteAppHandler" text="Delete" />
+                                 </buttons>
+                              </ButtonBar>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Customers">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <TableView fx:id="customerTableView" prefHeight="300.0">
+                                 <columns>
+                                    <TableColumn fx:id="customerIdCol" prefWidth="76.0" text="Customer_ID" />
+                                    <TableColumn fx:id="customerNameCol" prefWidth="100.0" text="Customer_Name" />
+                                    <TableColumn fx:id="customerAddressCol" prefWidth="100.0" text="Address" />
+                                    <TableColumn fx:id="customerPostalCol" prefWidth="71.0" text="Postal Code" />
+                                    <TableColumn fx:id="customerPhoneCol" prefWidth="75.0" text="Phone" />
+                                    <TableColumn fx:id="customerDivisionCol" prefWidth="68.0" text="Division" />
+                                 </columns>
+                              </TableView>
+                              <ButtonBar prefHeight="40.0" prefWidth="351.0">
+                                 <buttons>
+                                    <Button fx:id="addCustomerButton" mnemonicParsing="false" onAction="#addCustomerHandler" text="Add" />
+                                    <Button fx:id="modifyCustomerButton" mnemonicParsing="false" onAction="#modifyCustomerHandler" text="Modify" />
+                                    <Button fx:id="deleteCustomerButton" mnemonicParsing="false" onAction="#deleteCustomerHandler" text="Delete" />
+                                 </buttons>
+                              </ButtonBar>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+               </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
