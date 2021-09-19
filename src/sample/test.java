@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.dao.impl.AppointmentDaoImpl;
 import sample.dao.impl.ContactDaoImpl;
+import sample.model.Appointment;
 import sample.model.Contact;
 
 import java.sql.SQLException;
@@ -52,6 +53,14 @@ public class test {
         ContactDaoImpl inst = new ContactDaoImpl();
         Contact con = new Contact("Samuel Benning", "sam@ben.com");
         System.out.println(inst.updateContact(4, con));
+    }
+
+    public static ObservableList<Appointment> getapp() throws Exception {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+        AppointmentDaoImpl inst = new AppointmentDaoImpl();
+        appointments = inst.getAllAppointments();
+        return appointments;
     }
 
 }

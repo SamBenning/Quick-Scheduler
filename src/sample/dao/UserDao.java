@@ -3,14 +3,34 @@ package sample.dao;
 import javafx.collections.ObservableList;
 import sample.model.User;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public interface UserDao {
+public final class UserDao {
 
-    public ObservableList<User> getAllUsers () throws SQLException;
-    public ObservableList<User> getUser (String title) throws SQLException;
-    public boolean addUser (User user) throws SQLException;
-    public boolean updateUser(int existingID, User newUser);
-    public boolean deleteUser (User user) throws SQLException;
+
+    public static boolean checkCredentials(String username, String password) {
+        try {
+            JDBC.openConnection();
+            String query = "select 1 from users where User_Name = ? and Password = ?;";
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                JDBC.closeConnection();
+                return true;
+            } else {
+                JDBC.closeConnection();
+                return false;
+            }
+        } catch (SQLException e){
+            System.out.println(e);
+            JDBC.closeConnection();
+            return false;
+        }
+    }
 
 }

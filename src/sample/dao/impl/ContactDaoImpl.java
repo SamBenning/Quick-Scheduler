@@ -71,7 +71,6 @@ public class ContactDaoImpl implements ContactDao {
             String name = contact.getContactName();
             String email = contact.getEmail();
             String query = "insert into contacts(Contact_Name, Email) values(?,?);";
-
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, email);
