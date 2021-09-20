@@ -26,8 +26,8 @@ public class Main extends Application {
 
 
     public static void main(String[] args) throws Exception {
-        Class.forName("sample.dao.impl.ContactDaoImpl");
+        JDBC.openConnection();
         launch(args);
-
+        JDBC.closeConnection();
     }
 }

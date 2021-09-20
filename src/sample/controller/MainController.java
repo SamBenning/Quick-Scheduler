@@ -1,18 +1,17 @@
 package sample.controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
+import sample.dao.AppointmentDao;
+import sample.model.Appointment;
+import sample.model.Customer;
+import sample.util.JavaFXUtil;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -41,12 +40,30 @@ public class MainController implements Initializable {
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
 
+    private ObservableList<Appointment> appointments;
+    private ObservableList<Customer> customers;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        appointments = AppointmentDao.getAllAppointments();
+        appTableView.setItems(appointments);
+        appIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        appDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        appLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        appTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        appStartCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        appEndCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        appCustomerCol.setCellValueFactory(new PropertyValueFactory<>("customer"));
+        appUserCol.setCellValueFactory(new PropertyValueFactory<>("user"));
+        appContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
+
 
     }
 
     public void addAppHandler(ActionEvent actionEvent) {
+        JavaFXUtil.showNewWindow(actionEvent,
+                "/sample/view/appointmentViews/addAppointmentForm.fxml");
     }
 
     public void modifyAppHandler(ActionEvent actionEvent) {
@@ -56,27 +73,16 @@ public class MainController implements Initializable {
     }
 
     public void addCustomerHandler(ActionEvent actionEvent) {
-        showAddCustomerForm(actionEvent);
+        JavaFXUtil.showNewWindow(actionEvent,
+                "/sample/view/customerViews/addCustomerForm.fxml");
     }
 
     public void modifyCustomerHandler(ActionEvent actionEvent) {
+        JavaFXUtil.showNewWindow(actionEvent,
+                "/sample/view/customerViews/modifyCustomerForm.fxml");
     }
 
     public void deleteCustomerHandler(ActionEvent actionEvent) {
-    }
-
-    public void showAddCustomerForm(ActionEvent actionEvent) {
-        try {
-
-            Stage newWindow = new Stage();
-            newWindow.initModality(Modality.APPLICATION_MODAL);
-            newWindow.initOwner((Stage) ((Node) actionEvent.getSource()).getScene().getWindow());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/customerViews/addCustomerForm.fxml"));
-            newWindow.setScene(new Scene(loader.load()));
-            newWindow.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

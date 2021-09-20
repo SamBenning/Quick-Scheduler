@@ -12,7 +12,6 @@ public final class UserDao {
 
     public static boolean checkCredentials(String username, String password) {
         try {
-            JDBC.openConnection();
             String query = "select 1 from users where User_Name = ? and Password = ?;";
             PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
             preparedStatement.setString(1, username);
@@ -20,17 +19,13 @@ public final class UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                JDBC.closeConnection();
                 return true;
             } else {
-                JDBC.closeConnection();
                 return false;
             }
         } catch (SQLException e){
             System.out.println(e);
-            JDBC.closeConnection();
             return false;
         }
     }
-
 }

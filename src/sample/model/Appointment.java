@@ -1,6 +1,5 @@
 package sample.model;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Appointment {
@@ -10,29 +9,23 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
-    private Timestamp createDate;
-    private String createdBy;
-    private Timestamp lastUpdate;
-    private String lastUpdatedBy;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int customerId;
     private int userId;
     private int contactId;
+    private String customer;
+    private String user;
+    private String contact;
 
-    public Appointment(String title, String description, String location, String type,
-                       Timestamp start, Timestamp end, Timestamp createDate, String createdBy,
-                       Timestamp lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId) {
+    public Appointment(String title, String description, String location, String type, LocalDateTime start,
+                       LocalDateTime end, int customerId, int userId, int contactId) {
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = start;
         this.end = end;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdatedBy = lastUpdatedBy;
         this.customerId = customerId;
         this.userId = userId;
         this.contactId = contactId;
@@ -78,52 +71,44 @@ public class Appointment {
         this.type = type;
     }
 
-    public Timestamp getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(Timestamp start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public Timestamp getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Timestamp end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
-    public Timestamp getCreateDate() {
-        return createDate;
+    public String getCustomer() {
+        return customer;
     }
 
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getUser() {
+        return user;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
+    public String getContact() {
+        return contact;
     }
 
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String getLastUpdatedBy() {
-        return lastUpdatedBy;
-    }
-
-    public void setLastUpdatedBy(String lastUpdatedBy) {
-        this.lastUpdatedBy = lastUpdatedBy;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public int getCustomerId() {
