@@ -1,11 +1,14 @@
 package sample.util;
 
 import sample.dao.JDBC;
+import sample.model.Appointment;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public final class QueryUtil {
 
@@ -38,6 +41,38 @@ public final class QueryUtil {
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         return resultSet.getString(1) + " (ID: " + contactId + ")";
+    }
+
+    public static PreparedStatement getAddAppointmentPreparedStatement (Appointment appointment) throws SQLException {
+        String query = "insert into appointments(Title, Description, Location," +
+                "Type, Start, End, Customer_ID, User_ID, Contact_ID) values(?,?,?,?,?,?,?,?,?)";
+
+
+        LocalDateTime startLocalDateTime = appointment.getStart();
+        LocalDateTime endLocalDateTime = appointment.getEnd();
+        // Found this solution on stackoverflow:
+        // https://stackoverflow.com/questions/34626382/convert-localdatetime-to-localdatetime-in-utc
+        startLocalDateTime = appointment.getStart(); //startLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+        endLocalDateTime = appointment.getEnd(); //endLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+
+
+        DateTimeFormatter sqlFormatter = DateTimeFormatter.ISO_DATE_TIME;
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
+        preparedStatement.setString(1, appointment.getTitle());
+        preparedStatement.setString(2, appointment.getDescription());
+        preparedStatement.setString(3, appointment.getLocation());
+        preparedStatement.setString(4, appointment.getType());
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(startLocalDateTime));
+        preparedStatement.setTimestamp(6, Timestamp.valueOf(endLocalDateTime));
+        preparedStatement.setInt(7, 1);
+        preparedStatement.setInt(8, 1);
+        preparedStatement.setInt(9, 1);
+
+        System.out.println("SQL query:");
+        System.out.println(query);
+
+        return preparedStatement;
+
     }
 
 

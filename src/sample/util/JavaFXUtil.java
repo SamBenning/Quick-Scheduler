@@ -1,5 +1,6 @@
 package sample.util;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -7,6 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.controller.Controller;
+import sample.controller.appointmentControllers.AddAppointmentController;
+import sample.model.Appointment;
 
 import java.io.IOException;
 
@@ -27,6 +31,21 @@ public final class JavaFXUtil {
             newWindow.initModality(Modality.APPLICATION_MODAL);
             newWindow.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
             FXMLLoader loader = new FXMLLoader(JavaFXUtil.class.getResource(resourceLocation));
+            newWindow.setScene(new Scene(loader.load()));
+            newWindow.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showNewWindow(ActionEvent actionEvent, String resourceLocation, ObservableList<?> list) {
+        try {
+            Stage newWindow = new Stage();
+            newWindow.initModality(Modality.APPLICATION_MODAL);
+            newWindow.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            FXMLLoader loader = new FXMLLoader(JavaFXUtil.class.getResource(resourceLocation));
+            //loader.setController(controller);
+            loader.setControllerFactory(AddAppointmentController -> new AddAppointmentController((ObservableList<Appointment>) list));
             newWindow.setScene(new Scene(loader.load()));
             newWindow.show();
         } catch (IOException e) {

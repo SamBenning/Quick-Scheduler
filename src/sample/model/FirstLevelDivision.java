@@ -12,13 +12,9 @@ public class FirstLevelDivision {
     private String lastUpdatedBy;
     private int countryId;
 
-    public FirstLevelDivision(String divisionName, LocalDateTime createDate, String createdBy,
-                              LocalDateTime lastUpdate, String lastUpdatedBy, int countryId) {
+    public FirstLevelDivision(int divisionId, String divisionName, int countryId) {
+        this.divisionId = divisionId;
         this.divisionName = divisionName;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdatedBy = lastUpdatedBy;
         this.countryId = countryId;
     }
 

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.appointmentControllers.AddAppointmentController">
+<AnchorPane fx:controller="sample.controller.appointmentControllers.AddAppointmentController" prefHeight="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox prefHeight="600.0">
             <children>

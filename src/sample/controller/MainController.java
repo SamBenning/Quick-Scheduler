@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.dao.AppointmentDao;
 import sample.model.Appointment;
 import sample.model.Customer;
@@ -18,6 +19,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
     public TableView appTableView;
     public TableColumn appIdCol;
+    public TableColumn appTitleCol;
     public TableColumn appDescriptionCol;
     public TableColumn appLocationCol;
     public TableColumn appTypeCol;
@@ -49,6 +51,7 @@ public class MainController implements Initializable {
         appointments = AppointmentDao.getAllAppointments();
         appTableView.setItems(appointments);
         appIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        appTitleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         appDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         appLocationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         appTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -62,8 +65,11 @@ public class MainController implements Initializable {
     }
 
     public void addAppHandler(ActionEvent actionEvent) {
+        AddAppointmentController addAppointmentController = new AddAppointmentController(appointments);
         JavaFXUtil.showNewWindow(actionEvent,
-                "/sample/view/appointmentViews/addAppointmentForm.fxml");
+                "/sample/view/appointmentViews/addAppointmentForm.fxml",
+                appointments);
+        //appTableView.setItems(appointments);
     }
 
     public void modifyAppHandler(ActionEvent actionEvent) {

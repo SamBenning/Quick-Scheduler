@@ -5,25 +5,26 @@
 
 <AnchorPane prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainController">
    <children>
-      <TabPane prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefWidth="900.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Appointments">
             <content>
               <AnchorPane>
                      <children>
-                        <VBox>
+                        <VBox prefWidth="900.0">
                            <children>
                               <TableView fx:id="appTableView">
                                 <columns>
                                   <TableColumn fx:id="appIdCol" prefWidth="100.0" text="Appointment_ID" />
-                                  <TableColumn fx:id="appDescriptionCol" prefWidth="70.0" text="Description" />
-                                    <TableColumn fx:id="appLocationCol" prefWidth="54.0" text="Location" />
-                                    <TableColumn fx:id="appTypeCol" prefWidth="50.0" text="Type" />
-                                    <TableColumn fx:id="appStartCol" prefWidth="75.0" text="Start" />
-                                    <TableColumn fx:id="appEndCol" prefWidth="75.0" text="End" />
-                                    <TableColumn fx:id="appCustomerCol" prefWidth="75.0" text="Customer" />
-                                    <TableColumn fx:id="appUserCol" prefWidth="75.0" text="User" />
-                                    <TableColumn fx:id="appContactCol" prefWidth="75.0" text="Contact" />
+                                    <TableColumn fx:id="appTitleCol" prefWidth="60.0" text="Title" />
+                                  <TableColumn fx:id="appDescriptionCol" prefWidth="100.0" text="Description" />
+                                    <TableColumn fx:id="appLocationCol" prefWidth="60.0" text="Location" />
+                                    <TableColumn fx:id="appTypeCol" prefWidth="75.0" text="Type" />
+                                    <TableColumn fx:id="appStartCol" prefWidth="100.0" text="Start" />
+                                    <TableColumn fx:id="appEndCol" prefWidth="100.0" text="End" />
+                                    <TableColumn fx:id="appCustomerCol" prefWidth="85.0" text="Customer" />
+                                    <TableColumn fx:id="appUserCol" prefWidth="85.0" text="User" />
+                                    <TableColumn fx:id="appContactCol" prefWidth="85.0" text="Contact" />
                                 </columns>
                               </TableView>
                               <ButtonBar prefHeight="40.0" prefWidth="351.0">

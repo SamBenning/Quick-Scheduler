@@ -11,13 +11,9 @@ public class Country {
     private LocalDateTime lastUpdate;
     private String lastUpdatedBy;
 
-    public Country(String countryName, LocalDateTime createDate, String createdBy, LocalDateTime lastUpdate,
-                   String lastUpdatedBy) {
+    public Country(int countryId, String countryName) {
+        this.countryId = countryId;
         this.countryName = countryName;
-        this.createDate = createDate;
-        this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
-        this.lastUpdatedBy = lastUpdatedBy;
     }
 
     public int getCountryId() {
