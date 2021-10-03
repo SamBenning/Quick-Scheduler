@@ -2,6 +2,7 @@ package sample.util;
 
 import sample.dao.JDBC;
 import sample.model.Appointment;
+import sample.model.Customer;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -72,7 +73,19 @@ public final class QueryUtil {
         System.out.println(query);
 
         return preparedStatement;
+    }
 
+    public static PreparedStatement getAddCustomerPreparedStatement (Customer customer) throws SQLException {
+        String query = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
+                " values(?,?,?,?,?)";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
+        preparedStatement.setString(1, customer.getCustomerName());
+        preparedStatement.setString(2, customer.getAddress());
+        preparedStatement.setString(3, customer.getPostalCode());
+        preparedStatement.setString(4, customer.getPhone());
+        preparedStatement.setInt(5, customer.getDivisionId());
+
+        return preparedStatement;
     }
 
 

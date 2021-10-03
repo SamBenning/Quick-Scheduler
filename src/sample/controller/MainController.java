@@ -8,7 +8,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.controller.appointmentControllers.AddAppointmentController;
+import sample.controller.customerControllers.AddCustomerController;
 import sample.dao.AppointmentDao;
+import sample.dao.CustomerDao;
 import sample.model.Appointment;
 import sample.model.Customer;
 import sample.util.JavaFXUtil;
@@ -61,12 +63,19 @@ public class MainController implements Initializable {
         appUserCol.setCellValueFactory(new PropertyValueFactory<>("user"));
         appContactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
-
+        customers = CustomerDao.getAllCustomers();
+        customerTableView.setItems(customers);
+        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerId"));
+        customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerAddressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
     }
 
     public void addAppHandler(ActionEvent actionEvent) {
         AddAppointmentController addAppointmentController = new AddAppointmentController(appointments);
-        JavaFXUtil.showNewWindow(actionEvent,
+        JavaFXUtil.showAddAppWindow(actionEvent,
                 "/sample/view/appointmentViews/addAppointmentForm.fxml",
                 appointments);
         //appTableView.setItems(appointments);
@@ -79,8 +88,10 @@ public class MainController implements Initializable {
     }
 
     public void addCustomerHandler(ActionEvent actionEvent) {
-        JavaFXUtil.showNewWindow(actionEvent,
-                "/sample/view/customerViews/addCustomerForm.fxml");
+        AddCustomerController addCustomerController = new AddCustomerController(customers);
+        JavaFXUtil.showAddCustomerWindow(actionEvent,
+                "/sample/view/customerViews/addCustomerForm.fxml",
+                customers);
     }
 
     public void modifyCustomerHandler(ActionEvent actionEvent) {

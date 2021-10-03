@@ -32,4 +32,18 @@ public class FirstLevelDivisionDao {
         return divisions;
     }
 
+    public static int getDivisionId(String divisionName) {
+        String query = "select Division_ID from first_level_divisions where Division = ?";
+        try {
+            PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
+            preparedStatement.setString(1, divisionName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("Division_ID");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return -1;
+    }
 }

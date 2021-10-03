@@ -7,7 +7,7 @@ public class Customer {
     private int customerId;
     private String customerName;
     private String address;
-    private int postalCode;
+    private String postalCode;
     private String phone;
     private LocalDateTime createDate;
     private String createdBy;
@@ -15,7 +15,8 @@ public class Customer {
     private String lastUpdatedBy;
     private int divisionId;
 
-    public Customer(String customerName, String address, int postalCode, String phone, int divisionId) {
+    public Customer(int customerId, String customerName, String address, String postalCode, String phone, int divisionId) {
+        this.customerId = customerId;
         this.customerName = customerName;
         this.address = address;
         this.postalCode = postalCode;
@@ -47,11 +48,11 @@ public class Customer {
         this.address = address;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 

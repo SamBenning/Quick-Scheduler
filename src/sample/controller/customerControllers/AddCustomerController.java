@@ -7,11 +7,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import sample.dao.CountryDao;
+import sample.dao.CustomerDao;
 import sample.dao.FirstLevelDivisionDao;
 import sample.model.Country;
 import sample.model.Customer;
 import sample.model.FirstLevelDivision;
 import sample.util.JavaFXUtil;
+import sample.util.ValidationUtil;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -26,10 +28,14 @@ public class AddCustomerController implements Initializable {
     public ComboBox customerDivisionCombo;
     public ComboBox customerCountryCombo;
 
-    private HashMap<String, Integer> idNameMap = new HashMap<String, Integer>();
+    private HashMap<String, Integer> countryNameIdMap = new HashMap<String, Integer>();
+    private HashMap<String, Integer> divisionNameIdMap = new HashMap<String, Integer>();
     private ObservableList<Country> countries = CountryDao.getAllCountries();
     private ObservableList<String> countryNames = FXCollections.observableArrayList();
     private ObservableList<String> divisionNames = FXCollections.observableArrayList();
+    private ObservableList<Customer> customers;
+
+    public AddCustomerController (ObservableList<Customer> customers) {this.customers = customers;}
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -39,7 +45,7 @@ public class AddCustomerController implements Initializable {
             String name = country.getCountryName();
             Integer id = country.getCountryId();
             countryNames.add(name);
-            idNameMap.put(name, id);
+            countryNameIdMap.put(name, id);
         }
 
         customerCountryCombo.getItems().addAll(countryNames);
@@ -51,22 +57,33 @@ public class AddCustomerController implements Initializable {
 
     public void saveButtonHandler(ActionEvent actionEvent) {
 
-        Customer customer = new Customer (
+        if (ValidationUtil.validateAddCustomer(this));
+
+        int selectedDivisionId = FirstLevelDivisionDao.getDivisionId(
+                customerDivisionCombo.getSelectionModel().getSelectedItem().toString());
+
+        Customer newCustomer = new Customer (
+                -1,
                 customerNameField.getText(),
                 customerAddressField.getText(),
-                Integer.parseInt(customerPostalField.getText()),
+                customerPostalField.getText(),
                 customerPhoneField.getText(),
-                Integer.parseInt(customerDivisionCombo.getButtonCell().getText())
+                selectedDivisionId
         );
 
-        JavaFXUtil.closeWindow(actionEvent);
+        if(CustomerDao.addCustomer(newCustomer)) {
+            customers.setAll(CustomerDao.getAllCustomers());
+            JavaFXUtil.closeWindow(actionEvent);
+        }
+
+
     }
 
     public void selectCountryHandler(ActionEvent actionEvent) {
         customerDivisionCombo.getItems().clear();
         divisionNames.clear();
         String selection = customerCountryCombo.getSelectionModel().getSelectedItem().toString();
-        int selectionId = idNameMap.get(selection);
+        int selectionId = countryNameIdMap.get(selection);
 
         for (FirstLevelDivision division : FirstLevelDivisionDao.getDivisionsByCountry(selectionId)) {
             divisionNames.add(division.getDivisionName());
