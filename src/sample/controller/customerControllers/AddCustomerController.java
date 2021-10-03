@@ -57,23 +57,23 @@ public class AddCustomerController implements Initializable {
 
     public void saveButtonHandler(ActionEvent actionEvent) {
 
-        if (ValidationUtil.validateAddCustomer(this));
+        if (ValidationUtil.validateAddCustomer(this)) {
+            int selectedDivisionId = FirstLevelDivisionDao.getDivisionId(
+                    customerDivisionCombo.getSelectionModel().getSelectedItem().toString());
 
-        int selectedDivisionId = FirstLevelDivisionDao.getDivisionId(
-                customerDivisionCombo.getSelectionModel().getSelectedItem().toString());
+            Customer newCustomer = new Customer (
+                    -1,
+                    customerNameField.getText(),
+                    customerAddressField.getText(),
+                    customerPostalField.getText(),
+                    customerPhoneField.getText(),
+                    selectedDivisionId
+            );
 
-        Customer newCustomer = new Customer (
-                -1,
-                customerNameField.getText(),
-                customerAddressField.getText(),
-                customerPostalField.getText(),
-                customerPhoneField.getText(),
-                selectedDivisionId
-        );
-
-        if(CustomerDao.addCustomer(newCustomer)) {
-            customers.setAll(CustomerDao.getAllCustomers());
-            JavaFXUtil.closeWindow(actionEvent);
+            if(CustomerDao.addCustomer(newCustomer)) {
+                customers.setAll(CustomerDao.getAllCustomers());
+                JavaFXUtil.closeWindow(actionEvent);
+            }
         }
 
 
