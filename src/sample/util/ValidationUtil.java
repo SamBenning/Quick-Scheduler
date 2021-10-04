@@ -5,33 +5,24 @@ import sample.dao.FirstLevelDivisionDao;
 
 public abstract class ValidationUtil {
 
-    private static String invalidNameMessage;
-    private static String invalidAddressMessage;
-    private static String invalidPostalCodeMessage;
-    private static String invalidPhoneMessage;
-    private static String invalidDivisionIdMessage;
     private static String errorMessageToDisplay;
 
     public static boolean validateAddCustomer(AddCustomerController controller) {
 
         errorMessageToDisplay = "Please correct the following errors: ";
-        if (validateName(controller) &
+        if (
+                validateName(controller) &
                 validateAddress(controller) &
                 validatePostalCode(controller) &
                 validatePhone(controller) &
-                validateDivision(controller)) {
+                validateDivision(controller)
+        ){
             return true;
-
         } else {
             AlertUtil.showCustomerErrorAlert(errorMessageToDisplay);
         }
-
-        System.out.println("message: " + invalidNameMessage);
-
-        invalidNameMessage = "";
         errorMessageToDisplay = "";
         return false;
-
     }
 
     private static boolean validateName(AddCustomerController controller) {
