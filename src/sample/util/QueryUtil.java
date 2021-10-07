@@ -88,6 +88,19 @@ public final class QueryUtil {
         return preparedStatement;
     }
 
+    public static PreparedStatement getUpdateCustomerPreparedStatement (Customer customer) throws SQLException {
+        String query = "update customers set Customer_Name = ?, Address = ?, Postal_Code = ?," +
+                " Phone = ?,Division_ID = ? where Customer_ID = ?;";
+        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
+        preparedStatement.setString(1, customer.getCustomerName());
+        preparedStatement.setString(2, customer.getAddress());
+        preparedStatement.setString(3, customer.getPostalCode());
+        preparedStatement.setString(4, customer.getPhone());
+        preparedStatement.setInt(5, customer.getDivisionId());
+        preparedStatement.setInt(6, customer.getCustomerId());
+        return preparedStatement;
+    }
+
 
     private String query;
 

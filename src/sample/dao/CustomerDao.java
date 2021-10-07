@@ -45,8 +45,17 @@ public final class CustomerDao {
             return false;
         }
     }
-   /* public ObservableList<Customer> getCustomer (String title);
-    public boolean addCustomer (Customer customer);
-    public boolean updateCustomer(int existingID, Customer newCustomer);
-    public boolean deleteCustomer (Customer customer);*/
+
+    public static boolean updateCustomer(Customer customer) {
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getUpdateCustomerPreparedStatement(customer);
+            preparedStatement.executeUpdate();
+            System.out.println(preparedStatement.toString());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

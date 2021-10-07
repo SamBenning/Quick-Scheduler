@@ -1,32 +1,20 @@
 package sample.controller.customerControllers;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import sample.dao.CountryDao;
-import sample.model.Country;
+import sample.dao.CustomerDao;
+import sample.dao.FirstLevelDivisionDao;
 import sample.model.Customer;
 import sample.util.JavaFXUtil;
+import sample.util.ValidationUtil;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class ModifyCustomerController extends CustomerController implements Initializable {
-   /* public TextField customerNameField;
-    public TextField customerAddressField;
-    public TextField customerPostalField;
-    public TextField customerPhoneField;
-    public ComboBox customerDivisionCombo;
-    public ComboBox customerCountryCombo;
-    public Button cancelButton;
-    public Button saveButton;*/
 
-    private Customer selectedCustomer;//Will need to be passed in from MainController
+    private final Customer selectedCustomer;//Will need to be passed in from MainController
 
     public ModifyCustomerController(Customer selectedCustomer, ObservableList<Customer> customers) {
         super(customers);
@@ -36,11 +24,14 @@ public class ModifyCustomerController extends CustomerController implements Init
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerCountryCombo.getItems().addAll(countryNames);
-
+        int customerDivisionId = selectedCustomer.getDivisionId();
+        int customerCountryID = FirstLevelDivisionDao.getCountryIdByDivisionId(customerDivisionId);
         customerNameField.setText(selectedCustomer.getCustomerName());
         customerAddressField.setText(selectedCustomer.getAddress());
         customerPostalField.setText(selectedCustomer.getPostalCode());
         customerPhoneField.setText(selectedCustomer.getPhone());
+        customerCountryCombo.getSelectionModel().select(customerCountryID-1);
+        setInitialDivision(customerDivisionId);
     }
 
     public void cancelButtonHandler(ActionEvent actionEvent) {
@@ -48,6 +39,29 @@ public class ModifyCustomerController extends CustomerController implements Init
     }
 
     public void saveButtonHandler(ActionEvent actionEvent) {
-        JavaFXUtil.closeWindow(actionEvent);
+        if(ValidationUtil.validateCustomer(this)) {
+            updateCustomerInDb();
+            JavaFXUtil.closeWindow(actionEvent);
+        }
+    }
+
+    private void updateCustomerInDb() {
+        Customer updatedCustomer = instantiateCustomer();
+        updatedCustomer.setCustomerId(selectedCustomer.getCustomerId());
+        if(CustomerDao.updateCustomer(updatedCustomer)) {
+            customers.setAll(CustomerDao.getAllCustomers());
+        }
+    }
+
+    private void setInitialDivision(int divisionId) {
+        setDivisionList();
+        String divisionName = FirstLevelDivisionDao.getDivisionName(divisionId);
+        int i = 0;
+        for (String name : divisionNames) {
+            if (name.equals(divisionName)) {
+                customerDivisionCombo.getSelectionModel().select(i);
+            }
+            i++;
+        }
     }
 }

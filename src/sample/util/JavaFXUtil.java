@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import sample.controller.Controller;
 import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.controller.customerControllers.AddCustomerController;
+import sample.controller.customerControllers.ModifyCustomerController;
 import sample.model.Appointment;
 import sample.model.Customer;
 
@@ -63,6 +64,21 @@ public final class JavaFXUtil {
             FXMLLoader loader = new FXMLLoader(JavaFXUtil.class.getResource(resourceLocation));
             //loader.setController(controller);
             loader.setControllerFactory(AddCustomerController -> new AddCustomerController(list));
+            newWindow.setScene(new Scene(loader.load()));
+            newWindow.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void showModifyCustomerWindow(ActionEvent actionEvent, String resourceLocation,
+                                                ObservableList<Customer> list, Customer customer) {
+        try {
+            Stage newWindow = new Stage();
+            newWindow.initModality(Modality.APPLICATION_MODAL);
+            newWindow.initOwner(((Node) actionEvent.getSource()).getScene().getWindow());
+            FXMLLoader loader = new FXMLLoader(JavaFXUtil.class.getResource(resourceLocation));
+            loader.setControllerFactory(AddCustomerController -> new ModifyCustomerController(customer, list));
             newWindow.setScene(new Scene(loader.load()));
             newWindow.show();
         } catch (IOException e) {

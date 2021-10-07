@@ -3,9 +3,8 @@ package sample.controller.customerControllers;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import sample.dao.FirstLevelDivisionDao;
+import sample.dao.CustomerDao;
 import sample.model.Customer;
-import sample.model.FirstLevelDivision;
 import sample.util.JavaFXUtil;
 import sample.util.ValidationUtil;
 
@@ -29,20 +28,15 @@ public class AddCustomerController extends CustomerController implements Initial
     }
 
     public void saveButtonHandler(ActionEvent actionEvent) {
-        if (ValidationUtil.validateAddCustomer(this)) {
-            addCustomerToDb(actionEvent);
+        if (ValidationUtil.validateCustomer(this)) {
+            addCustomerToDb();
+            JavaFXUtil.closeWindow(actionEvent);
         }
     }
 
-    public void selectCountryHandler(ActionEvent actionEvent) {
-        customerDivisionCombo.getItems().clear();
-        divisionNames.clear();
-        String selection = customerCountryCombo.getSelectionModel().getSelectedItem().toString();
-        int selectionId = countryNameIdMap.get(selection);
-
-        for (FirstLevelDivision division : FirstLevelDivisionDao.getDivisionsByCountry(selectionId)) {
-            divisionNames.add(division.getDivisionName());
+    private void addCustomerToDb() {
+        if(CustomerDao.addCustomer(instantiateCustomer())) {
+            customers.setAll(CustomerDao.getAllCustomers());
         }
-        customerDivisionCombo.getItems().addAll(divisionNames);
     }
 }

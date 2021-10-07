@@ -88,15 +88,24 @@ public class MainController implements Initializable {
     }
 
     public void addCustomerHandler(ActionEvent actionEvent) {
-        AddCustomerController addCustomerController = new AddCustomerController(customers);
+        //AddCustomerController addCustomerController = new AddCustomerController(customers);
         JavaFXUtil.showAddCustomerWindow(actionEvent,
                 "/sample/view/customerViews/addCustomerForm.fxml",
                 customers);
     }
 
     public void modifyCustomerHandler(ActionEvent actionEvent) {
-        JavaFXUtil.showNewWindow(actionEvent,
-                "/sample/view/customerViews/modifyCustomerForm.fxml");
+        Customer customer;
+        try {
+            customer = (Customer)customerTableView.getSelectionModel().getSelectedItem();
+            JavaFXUtil.showModifyCustomerWindow(actionEvent,
+                    "/sample/view/customerViews/modifyCustomerForm.fxml", customers, customer);
+        } catch (Exception e) {
+            System.out.println("No customer selected.");;
+        }
+
+       /* JavaFXUtil.showNewWindow(actionEvent,
+                "/sample/view/customerViews/modifyCustomerForm.fxml");*/
     }
 
     public void deleteCustomerHandler(ActionEvent actionEvent) {

@@ -1,13 +1,14 @@
 package sample.util;
 
 import sample.controller.customerControllers.AddCustomerController;
+import sample.controller.customerControllers.CustomerController;
 import sample.dao.FirstLevelDivisionDao;
 
 public abstract class ValidationUtil {
 
     private static String errorMessageToDisplay;
 
-    public static boolean validateAddCustomer(AddCustomerController controller) {
+    public static boolean validateCustomer(CustomerController controller) {
 
         errorMessageToDisplay = "Please correct the following errors: ";
         if (
@@ -25,7 +26,7 @@ public abstract class ValidationUtil {
         return false;
     }
 
-    private static boolean validateName(AddCustomerController controller) {
+    private static boolean validateName(CustomerController controller) {
         if (controller.customerNameField.getText().isBlank()) {
             errorMessageToDisplay += "\n-Name cannot be blank.";
             return false;
@@ -36,7 +37,7 @@ public abstract class ValidationUtil {
         return true;
     }
 
-    private static boolean validateAddress(AddCustomerController controller) {
+    private static boolean validateAddress(CustomerController controller) {
        if (controller.customerAddressField.getText().isBlank()) {
            errorMessageToDisplay += "\n-Address cannot be blank.";
            return false;
@@ -48,7 +49,7 @@ public abstract class ValidationUtil {
         }
     }
 
-    private static boolean validatePostalCode(AddCustomerController controller) {
+    private static boolean validatePostalCode(CustomerController controller) {
         if (controller.customerPostalField.getText().isBlank()) {
             errorMessageToDisplay += "\n-Postal code cannot be blank.";
             return false;
@@ -60,7 +61,7 @@ public abstract class ValidationUtil {
         }
     }
 
-    private static boolean validatePhone(AddCustomerController controller) {
+    private static boolean validatePhone(CustomerController controller) {
         if (controller.customerPhoneField.getText().isBlank()) {
             errorMessageToDisplay += "\n-Phone number cannot be blank.";
             return false;
@@ -72,7 +73,7 @@ public abstract class ValidationUtil {
         }
     }
 
-    private static boolean validateDivision(AddCustomerController controller) {
+    private static boolean validateDivision(CustomerController controller) {
         try {
             if (FirstLevelDivisionDao.getDivisionId(
                     controller.customerDivisionCombo.getSelectionModel().getSelectedItem().toString()) == -1

@@ -2,16 +2,13 @@ package sample.controller.customerControllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import sample.dao.CountryDao;
-import sample.dao.CustomerDao;
 import sample.dao.FirstLevelDivisionDao;
 import sample.model.Country;
 import sample.model.Customer;
-import sample.util.JavaFXUtil;
+import sample.model.FirstLevelDivision;
 import java.util.HashMap;
 
 public abstract class CustomerController {
@@ -19,8 +16,8 @@ public abstract class CustomerController {
     public TextField customerAddressField;
     public TextField customerPostalField;
     public TextField customerPhoneField;
-    public ComboBox customerDivisionCombo;
-    public ComboBox customerCountryCombo;
+    public ComboBox<String> customerDivisionCombo;
+    public ComboBox<String> customerCountryCombo;
     protected HashMap<String, Integer> countryNameIdMap;
     protected ObservableList<Customer> customers;
     protected ObservableList<Country> countries;
@@ -45,11 +42,11 @@ public abstract class CustomerController {
         }
     }
 
-    protected void addCustomerToDb(ActionEvent actionEvent) {
+    protected Customer instantiateCustomer() {
         int selectedDivisionId = FirstLevelDivisionDao.getDivisionId(
-                customerDivisionCombo.getSelectionModel().getSelectedItem().toString());
+                customerDivisionCombo.getSelectionModel().getSelectedItem());
 
-        Customer newCustomer = new Customer (
+        return new Customer (
                 -1,
                 customerNameField.getText(),
                 customerAddressField.getText(),
@@ -57,10 +54,23 @@ public abstract class CustomerController {
                 customerPhoneField.getText(),
                 selectedDivisionId
         );
-
-        if(CustomerDao.addCustomer(newCustomer)) {
-            customers.setAll(CustomerDao.getAllCustomers());
-            JavaFXUtil.closeWindow(actionEvent);
-        }
     }
+
+    public void selectCountryHandler() {
+        customerDivisionCombo.getItems().clear();
+        divisionNames.clear();
+        setDivisionList();
+    }
+
+    public void setDivisionList() {
+        divisionNames.clear();
+        String selection = customerCountryCombo.getSelectionModel().getSelectedItem();
+        int selectionId = countryNameIdMap.get(selection);
+
+        for (FirstLevelDivision division : FirstLevelDivisionDao.getDivisionsByCountry(selectionId)) {
+            divisionNames.add(division.getDivisionName());
+        }
+        customerDivisionCombo.getItems().addAll(divisionNames);
+    }
+
 }
