@@ -1,15 +1,11 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sample.dao.JDBC;
-import sample.dao.impl.ContactDaoImpl;
-import sample.model.Appointment;
-import sample.model.Contact;
 
 import java.util.Objects;
 

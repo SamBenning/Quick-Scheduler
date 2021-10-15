@@ -6,16 +6,29 @@ import sample.model.Customer;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public final class QueryUtil {
+    
+    private static PreparedStatement addCustomerPreparedStatement;
+    private static PreparedStatement updateCustomerPreparedStatement;
+    private static PreparedStatement getAllUsersPreparedStatement;
 
-    private Statement selectAllStatement;
-    private static Statement selectAll;
-    private static String selectQuery = "select ? from ? where ? = ?";
+    static {
+        String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
+                " values(?,?,?,?,?)";
+        String updateCustomerQ = "update customers set Customer_Name = ?, Address = ?, Postal_Code = ?," +
+                " Phone = ?,Division_ID = ? where Customer_ID = ?;";
+        String getAllUsersQ = "select * from users;";
+        try {
+            addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
+            updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
+            getAllUsersPreparedStatement = JDBC.connection.prepareStatement(getAllUsersQ);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     public static String getCustomerString(int customerId) throws SQLException {
         String query = "select Customer_Name from customers where Customer_ID = ?;";
@@ -65,47 +78,34 @@ public final class QueryUtil {
         preparedStatement.setString(4, appointment.getType());
         preparedStatement.setTimestamp(5, Timestamp.valueOf(startLocalDateTime));
         preparedStatement.setTimestamp(6, Timestamp.valueOf(endLocalDateTime));
-        preparedStatement.setInt(7, 1);
-        preparedStatement.setInt(8, 1);
-        preparedStatement.setInt(9, 1);
-
-        System.out.println("SQL query:");
-        System.out.println(query);
+        preparedStatement.setInt(7, appointment.getCustomerId());
+        preparedStatement.setInt(8, appointment.getUserId());
+        preparedStatement.setInt(9, appointment.getContactId());
 
         return preparedStatement;
     }
 
     public static PreparedStatement getAddCustomerPreparedStatement (Customer customer) throws SQLException {
-        String query = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
-                " values(?,?,?,?,?)";
-        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
-        preparedStatement.setString(1, customer.getCustomerName());
-        preparedStatement.setString(2, customer.getAddress());
-        preparedStatement.setString(3, customer.getPostalCode());
-        preparedStatement.setString(4, customer.getPhone());
-        preparedStatement.setInt(5, customer.getDivisionId());
-
-        return preparedStatement;
+        addCustomerPreparedStatement.setString(1, customer.getCustomerName());
+        addCustomerPreparedStatement.setString(2, customer.getAddress());
+        addCustomerPreparedStatement.setString(3, customer.getPostalCode());
+        addCustomerPreparedStatement.setString(4, customer.getPhone());
+        addCustomerPreparedStatement.setInt(5, customer.getDivisionId());
+        return addCustomerPreparedStatement;
     }
 
     public static PreparedStatement getUpdateCustomerPreparedStatement (Customer customer) throws SQLException {
-        String query = "update customers set Customer_Name = ?, Address = ?, Postal_Code = ?," +
-                " Phone = ?,Division_ID = ? where Customer_ID = ?;";
-        PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
-        preparedStatement.setString(1, customer.getCustomerName());
-        preparedStatement.setString(2, customer.getAddress());
-        preparedStatement.setString(3, customer.getPostalCode());
-        preparedStatement.setString(4, customer.getPhone());
-        preparedStatement.setInt(5, customer.getDivisionId());
-        preparedStatement.setInt(6, customer.getCustomerId());
-        return preparedStatement;
+        updateCustomerPreparedStatement.setString(1, customer.getCustomerName());
+        updateCustomerPreparedStatement.setString(2, customer.getAddress());
+        updateCustomerPreparedStatement.setString(3, customer.getPostalCode());
+        updateCustomerPreparedStatement.setString(4, customer.getPhone());
+        updateCustomerPreparedStatement.setInt(5, customer.getDivisionId());
+        updateCustomerPreparedStatement.setInt(6, customer.getCustomerId());
+        return updateCustomerPreparedStatement;
     }
 
-
-    private String query;
-
-    public static String getFormattedCustomerString(int customerId) {
-        String query = "select Customer_Name from customers where Customer_ID = ?";
-        return "";
+    public static PreparedStatement getAllUsersPreparedStatement () {
+        return getAllUsersPreparedStatement;
     }
+
 }
