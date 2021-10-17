@@ -15,6 +15,9 @@ import java.time.*;
 public abstract class ValidationUtil {
 
     private static String errorMessageToDisplay;
+    private static Duration diff;
+    private static int startHour;
+    private static int endHour;
 
     public static boolean validateCustomer(CustomerController controller) {
 
@@ -40,6 +43,9 @@ public abstract class ValidationUtil {
             errorMessageToDisplay += "\n-All date/time values must be filled in.";
         }
 
+        setDiff();
+        setHours();
+
         if (
                 validateTitle(controller) &
                 validateDescription(controller) &
@@ -59,6 +65,19 @@ public abstract class ValidationUtil {
         }
         errorMessageToDisplay = "";
         return false;
+    }
+
+    private static void setDiff() {
+        ZoneId localZone = ZoneId.systemDefault();
+        ZoneId easternZone = ZoneId.of("America/New_York");
+        LocalDate today = LocalDate.now();
+        diff = Duration.between(today.atStartOfDay(localZone), today.atStartOfDay(easternZone));
+    }
+
+    private static void setHours() {
+        int hourOffset = (int)diff.toHours();
+        startHour =  8 + hourOffset;
+        endHour = 22 + hourOffset;
     }
 
     private static boolean validateTitle(AppointmentController controller) {
@@ -109,10 +128,10 @@ public abstract class ValidationUtil {
      * Checks whether the start time selected by the user is within business hours by converting system time to EST.
      * If any date/time parameters have been left blank, the method simply returns false and doesn't
      * do anything.*/
-    private static  boolean validateStart(AppointmentController controller) {
+    private static boolean validateStart(AppointmentController controller) {
         if (controller.hasEmptyDateTimeCombo()) {return false;}
-        ZonedDateTime adjustedDateTime = controller.getStartDateTime().atZone(ZoneId.of("America/New_York"));
-        if (adjustedDateTime.getHour() < 8 || adjustedDateTime.getHour() >= 22) {
+        int setStartHour = controller.getStartDateTime().getHour();
+        if (setStartHour < startHour || setStartHour >= endHour) {
             errorMessageToDisplay += "\n-Invalid start time--outside of business hours.";
             return false;
         }
@@ -121,11 +140,12 @@ public abstract class ValidationUtil {
 
     private static boolean validateEnd(AppointmentController controller) {
         if (controller.hasEmptyDateTimeCombo()) {return false;}
-        ZonedDateTime adjustedDateTime = controller.getEndDateTime().atZone(ZoneId.of("America/New_York"));
-        if (adjustedDateTime.getHour() <= 8 || adjustedDateTime.getHour() > 22) {
+        int setEndMinute = controller.getEndDateTime().getMinute();
+        int setEndHour = controller.getEndDateTime().getHour();
+        if (setEndHour <= startHour || setEndHour > endHour) {
             errorMessageToDisplay += "\n-Invalid end time--outside of business hours.";
             return false;
-        } else if (adjustedDateTime.getHour() == 22 && adjustedDateTime.getMinute() != 0) {
+        } else if (setEndHour == endHour && setEndMinute != 0) {
             errorMessageToDisplay += "\n-Invalid end time--outside of business hours.";
             return false;
         }

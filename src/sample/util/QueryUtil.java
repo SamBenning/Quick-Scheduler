@@ -14,6 +14,7 @@ public final class QueryUtil {
     private static PreparedStatement updateCustomerPreparedStatement;
     private static PreparedStatement getAllUsersPreparedStatement;
     private static PreparedStatement getCustomerByIdPreparedStatement;
+    private static PreparedStatement updateAppointmentPreparedStatement;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -22,11 +23,14 @@ public final class QueryUtil {
                 " Phone = ?,Division_ID = ? where Customer_ID = ?;";
         String getAllUsersQ = "select * from users;";
         String getCustomerByIdQ = "select * from customers where Customer_ID = ?;";
+        String updateAppointmentQ = "update appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
+                "Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? where Appointment_ID = ?;";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
             getAllUsersPreparedStatement = JDBC.connection.prepareStatement(getAllUsersQ);
             getCustomerByIdPreparedStatement = JDBC.connection.prepareStatement(getCustomerByIdQ);
+            updateAppointmentPreparedStatement = JDBC.connection.prepareStatement(updateAppointmentQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -114,6 +118,20 @@ public final class QueryUtil {
     public static PreparedStatement getCustomerByIdPreparedStatement (int customerId) throws SQLException {
         getCustomerByIdPreparedStatement.setInt(1, customerId);
         return getCustomerByIdPreparedStatement;
+    }
+
+    public static PreparedStatement getUpdateAppointmentPreparedStatement (int id, Appointment updatedApp) throws SQLException {
+        updateAppointmentPreparedStatement.setString(1, updatedApp.getTitle());
+        updateAppointmentPreparedStatement.setString(2, updatedApp.getDescription());
+        updateAppointmentPreparedStatement.setString(3, updatedApp.getLocation());
+        updateAppointmentPreparedStatement.setString(4, updatedApp.getType());
+        updateAppointmentPreparedStatement.setTimestamp(5, Timestamp.valueOf(updatedApp.getStart()));
+        updateAppointmentPreparedStatement.setTimestamp(6, Timestamp.valueOf(updatedApp.getEnd()));
+        updateAppointmentPreparedStatement.setInt(7, updatedApp.getCustomerId());
+        updateAppointmentPreparedStatement.setInt(8, updatedApp.getUserId());
+        updateAppointmentPreparedStatement.setInt(9, updatedApp.getContactId());
+        updateAppointmentPreparedStatement.setInt(10, id);
+        return  updateAppointmentPreparedStatement;
     }
 
 }

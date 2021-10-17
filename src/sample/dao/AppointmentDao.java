@@ -66,8 +66,15 @@ public final class AppointmentDao {
     }
 
 
-    public boolean updateAppointment(int existingId, Appointment newAppointment) {
-        return true;
+    public static boolean updateAppointment(int existingId, Appointment newAppointment) {
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getUpdateAppointmentPreparedStatement(existingId, newAppointment);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return false;
+        }
     }
 
     public static boolean addAppointment(Appointment appointment) {

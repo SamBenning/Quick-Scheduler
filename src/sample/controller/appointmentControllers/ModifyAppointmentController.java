@@ -1,12 +1,16 @@
 package sample.controller.appointmentControllers;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import sample.controller.customerControllers.ModifyCustomerController;
+import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
 import sample.model.Appointment;
 import sample.model.Customer;
+import sample.util.JavaFXUtil;
+import sample.util.ValidationUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -42,6 +46,26 @@ public class ModifyAppointmentController extends AppointmentController implement
         selectInitialContact();
         selectInitialDate();
         selectInitialTimes();
+    }
+
+    public void saveButtonHandler(ActionEvent actionEvent) {
+        setDate();
+        setStartDateTime();
+        setEndDateTime();
+        if (ValidationUtil.validateAppointment(this)) {
+            updateAppInDb();
+            JavaFXUtil.closeWindow(actionEvent);
+        }
+    }
+
+    public void cancelButtonHandler(ActionEvent actionEvent) {
+        JavaFXUtil.closeWindow(actionEvent);
+    }
+
+    private void updateAppInDb() {
+        if(AppointmentDao.updateAppointment(selectedAppointment.getAppointmentId(), instantiateAppointment())) {
+            appointments.setAll(AppointmentDao.getAllAppointments());
+        }
     }
 
     private void selectInitialCustomer() {
