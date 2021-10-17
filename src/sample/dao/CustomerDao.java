@@ -58,4 +58,24 @@ public final class CustomerDao {
         }
     }
 
+    public static Customer getCustomer(int customerId) {
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getCustomerByIdPreparedStatement(customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                Customer customer = new Customer(
+                        resultSet.getInt("Customer_ID"),
+                        resultSet.getString("Customer_Name"),
+                        resultSet.getString("Address"),
+                        resultSet.getString("Postal_Code"),
+                        resultSet.getString("Phone"),
+                        resultSet.getInt("Division_ID")
+                );
+                return customer;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -13,11 +13,11 @@ import sample.model.Contact;
 import sample.model.Customer;
 import sample.model.User;
 
+import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public abstract class AppointmentController {
     public TextField appTitleField;
@@ -64,11 +64,21 @@ public abstract class AppointmentController {
 
     protected void initCustomers(ObservableList<Customer> customers) {
         for (Customer customer: customers) {
-            String comboString = "(" + customer.getCustomerId() + ") - " + customer.getCustomerName();
-            Integer id = customer.getCustomerId();
+            int id = customer.getCustomerId();
+            String idString = "";
+            if (id < 100) {
+                idString += "0";
+            }
+            if (id < 10) {
+                idString += "0";
+            }
+            idString += id;
+            String comboString = "(" + idString + ") - " + customer.getCustomerName();
             customerToIdMap.put(comboString, id);
         }
-        appCustomerCombo.getItems().addAll(customerToIdMap.keySet());
+        ArrayList<String> keys = new ArrayList<>(customerToIdMap.keySet());
+        Collections.sort(keys);
+        appCustomerCombo.getItems().addAll(keys);
     }
 
     protected void initUsers(ObservableList<User> users) {
@@ -77,7 +87,9 @@ public abstract class AppointmentController {
             Integer id = user.getUserId();
             userToIdMap.put(comboString, id);
         }
-        appUserCombo.getItems().addAll(userToIdMap.keySet());
+        ArrayList<String> keys = new ArrayList<>(userToIdMap.keySet());
+        Collections.sort(keys);
+        appUserCombo.getItems().addAll(keys);
     }
 
     protected void initContacts(ObservableList<Contact> contacts) {
@@ -86,7 +98,9 @@ public abstract class AppointmentController {
             Integer id = contact.getContactId();
             contactToIdMap.put(comboString, id);
         }
-        appContactCombo.getItems().addAll(contactToIdMap.keySet());
+        ArrayList<String> keys = new ArrayList<>(contactToIdMap.keySet());
+        Collections.sort(keys);
+        appContactCombo.getItems().addAll(keys);
     }
 
     protected void initTimeCombos() {

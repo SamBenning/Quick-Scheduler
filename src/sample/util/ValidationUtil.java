@@ -8,6 +8,10 @@ import sample.model.Appointment;
 
 import java.time.*;
 
+/**
+ * Contains public methods which take in a controller object and perform validation on user input.
+ * Generates and error message string and calls AlertUtil to display an error message if any validation
+ * fails.*/
 public abstract class ValidationUtil {
 
     private static String errorMessageToDisplay;

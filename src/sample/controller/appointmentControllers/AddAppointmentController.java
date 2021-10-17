@@ -1,5 +1,4 @@
 package sample.controller.appointmentControllers;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -7,7 +6,6 @@ import sample.dao.AppointmentDao;
 import sample.model.Appointment;
 import sample.util.JavaFXUtil;
 import sample.util.ValidationUtil;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -55,6 +53,4 @@ public class AddAppointmentController extends AppointmentController implements I
             appointments.setAll(AppointmentDao.getAllAppointments());
         }
     }
-
-
 }

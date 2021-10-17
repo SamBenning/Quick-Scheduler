@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.controller.appointmentControllers.AddAppointmentController;
+import sample.controller.appointmentControllers.ModifyAppointmentController;
 import sample.controller.customerControllers.AddCustomerController;
 import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
@@ -82,6 +83,15 @@ public class MainController implements Initializable {
     }
 
     public void modifyAppHandler(ActionEvent actionEvent) {
+        Appointment appointment;
+        try {
+            appointment = (Appointment) appTableView.getSelectionModel().getSelectedItem();
+            JavaFXUtil.showModifyAppWindow(actionEvent,
+                    "/sample/view/appointmentViews/modifyAppointmentForm.fxml",
+                    appointments, appointment);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteAppHandler(ActionEvent actionEvent) {
@@ -105,7 +115,7 @@ public class MainController implements Initializable {
         }
 
        /* JavaFXUtil.showNewWindow(actionEvent,
-                "/sample/view/customerViews/modifyCustomerForm.fxml");*/
+                "/sample/view/customerViews/modifyAppointmentForm.fxml");*/
     }
 
     public void deleteCustomerHandler(ActionEvent actionEvent) {

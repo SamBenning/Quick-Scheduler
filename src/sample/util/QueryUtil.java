@@ -13,6 +13,7 @@ public final class QueryUtil {
     private static PreparedStatement addCustomerPreparedStatement;
     private static PreparedStatement updateCustomerPreparedStatement;
     private static PreparedStatement getAllUsersPreparedStatement;
+    private static PreparedStatement getCustomerByIdPreparedStatement;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -20,10 +21,12 @@ public final class QueryUtil {
         String updateCustomerQ = "update customers set Customer_Name = ?, Address = ?, Postal_Code = ?," +
                 " Phone = ?,Division_ID = ? where Customer_ID = ?;";
         String getAllUsersQ = "select * from users;";
+        String getCustomerByIdQ = "select * from customers where Customer_ID = ?;";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
             getAllUsersPreparedStatement = JDBC.connection.prepareStatement(getAllUsersQ);
+            getCustomerByIdPreparedStatement = JDBC.connection.prepareStatement(getCustomerByIdQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -106,6 +109,11 @@ public final class QueryUtil {
 
     public static PreparedStatement getAllUsersPreparedStatement () {
         return getAllUsersPreparedStatement;
+    }
+
+    public static PreparedStatement getCustomerByIdPreparedStatement (int customerId) throws SQLException {
+        getCustomerByIdPreparedStatement.setInt(1, customerId);
+        return getCustomerByIdPreparedStatement;
     }
 
 }
