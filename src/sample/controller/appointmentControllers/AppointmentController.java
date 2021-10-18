@@ -197,4 +197,8 @@ public abstract class AppointmentController {
         return endDateTime;
     }
 
+    public int getSelectedCustomerId() {
+        return customerToIdMap.get(appCustomerCombo.getSelectionModel().getSelectedItem());
+    }
+
 }

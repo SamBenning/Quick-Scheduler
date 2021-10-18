@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public final class AppointmentDao {
 
@@ -45,6 +46,32 @@ public final class AppointmentDao {
             System.out.println("null ptr exception");
         }
         return appointments;
+    }
+
+    public static ArrayList<Appointment> getAppointmentsForCustomer(int customerId) {
+        ArrayList<Appointment> appointments = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getAppointmentForCustomerPreparedStatement(customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment newAppointment = new Appointment(
+                        resultSet.getString("Title"),
+                        resultSet.getString("Description"),
+                        resultSet.getString("Location"),
+                        resultSet.getString("Type"),
+                        resultSet.getTimestamp("Start").toLocalDateTime(),
+                        resultSet.getTimestamp("End").toLocalDateTime(),
+                        resultSet.getInt("Customer_ID"),
+                        resultSet.getInt("User_ID"),
+                        resultSet.getInt("Contact_ID")
+                );
+                appointments.add(newAppointment);
+            }
+
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+        return  appointments;
     }
 
 

@@ -15,6 +15,7 @@ public final class QueryUtil {
     private static PreparedStatement getAllUsersPreparedStatement;
     private static PreparedStatement getCustomerByIdPreparedStatement;
     private static PreparedStatement updateAppointmentPreparedStatement;
+    private static PreparedStatement getAppointmentForCustomerPreparedStatement;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -25,12 +26,14 @@ public final class QueryUtil {
         String getCustomerByIdQ = "select * from customers where Customer_ID = ?;";
         String updateAppointmentQ = "update appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
                 "Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? where Appointment_ID = ?;";
+        String getAppointmentForCustomerQ = "select * from appointments where Customer_ID = ?";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
             getAllUsersPreparedStatement = JDBC.connection.prepareStatement(getAllUsersQ);
             getCustomerByIdPreparedStatement = JDBC.connection.prepareStatement(getCustomerByIdQ);
             updateAppointmentPreparedStatement = JDBC.connection.prepareStatement(updateAppointmentQ);
+            getAppointmentForCustomerPreparedStatement = JDBC.connection.prepareStatement(getAppointmentForCustomerQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -132,6 +135,11 @@ public final class QueryUtil {
         updateAppointmentPreparedStatement.setInt(9, updatedApp.getContactId());
         updateAppointmentPreparedStatement.setInt(10, id);
         return  updateAppointmentPreparedStatement;
+    }
+
+    public static PreparedStatement getAppointmentForCustomerPreparedStatement(int customerId) throws SQLException {
+        getAppointmentForCustomerPreparedStatement.setInt(1, customerId);
+        return getAppointmentForCustomerPreparedStatement;
     }
 
 }
