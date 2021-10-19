@@ -5,6 +5,7 @@ import sample.model.Appointment;
 import sample.model.Customer;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,6 +17,7 @@ public final class QueryUtil {
     private static PreparedStatement getCustomerByIdPreparedStatement;
     private static PreparedStatement updateAppointmentPreparedStatement;
     private static PreparedStatement getAppointmentForCustomerPreparedStatement;
+    private static PreparedStatement getAppointmentInDateRange;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -27,6 +29,7 @@ public final class QueryUtil {
         String updateAppointmentQ = "update appointments set Title = ?, Description = ?, Location = ?, Type = ?, " +
                 "Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? where Appointment_ID = ?;";
         String getAppointmentForCustomerQ = "select * from appointments where Customer_ID = ?";
+        String getAppointInDateRangeQ = "select * from appointments where Start between ? and ?;";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
@@ -34,6 +37,7 @@ public final class QueryUtil {
             getCustomerByIdPreparedStatement = JDBC.connection.prepareStatement(getCustomerByIdQ);
             updateAppointmentPreparedStatement = JDBC.connection.prepareStatement(updateAppointmentQ);
             getAppointmentForCustomerPreparedStatement = JDBC.connection.prepareStatement(getAppointmentForCustomerQ);
+            getAppointmentInDateRange = JDBC.connection.prepareStatement(getAppointInDateRangeQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -140,6 +144,12 @@ public final class QueryUtil {
     public static PreparedStatement getAppointmentForCustomerPreparedStatement(int customerId) throws SQLException {
         getAppointmentForCustomerPreparedStatement.setInt(1, customerId);
         return getAppointmentForCustomerPreparedStatement;
+    }
+
+    public static PreparedStatement getAppointmentInDateRange(LocalDate firstDate, LocalDate secondDate) throws SQLException{
+        getAppointmentInDateRange.setTimestamp(1, Timestamp.valueOf(firstDate.atStartOfDay()));
+        getAppointmentInDateRange.setTimestamp(2, Timestamp.valueOf(secondDate.atTime(23, 59, 59, 999)));
+        return getAppointmentInDateRange;
     }
 
 }

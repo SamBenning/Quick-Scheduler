@@ -3,9 +3,7 @@ package sample.controller;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.controller.appointmentControllers.ModifyAppointmentController;
@@ -17,6 +15,11 @@ import sample.model.Customer;
 import sample.util.JavaFXUtil;
 
 import java.net.URL;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -44,6 +47,10 @@ public class MainController implements Initializable {
     public Button addCustomerButton;
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
+    public RadioButton appViewAllRadio;
+    public ToggleGroup appViewGroup;
+    public RadioButton appViewWeekRadio;
+    public RadioButton appViewMonthRadio;
 
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers;
@@ -72,6 +79,8 @@ public class MainController implements Initializable {
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+
+        appViewGroup.selectToggle(appViewAllRadio);
     }
 
     public void addAppHandler(ActionEvent actionEvent) {
@@ -121,4 +130,21 @@ public class MainController implements Initializable {
     public void deleteCustomerHandler(ActionEvent actionEvent) {
     }
 
+    public void viewAllHandler(ActionEvent actionEvent) {
+    }
+
+    private void filterAll() {
+        appointments = AppointmentDao.getAllAppointments();
+    }
+
+    public void viewWeekHandler(ActionEvent actionEvent) {
+        DayOfWeek firstDayOfWeek = DayOfWeek.SUNDAY;
+        DayOfWeek lastDayOfWeek = DayOfWeek.SATURDAY;
+        LocalDate firstDateOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+        LocalDate lastDateOfWeek = LocalDate.now().with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
+        appTableView.setItems(AppointmentDao.getAppointmentsInDateRange(firstDateOfWeek, lastDateOfWeek));
+    }
+
+    public void viewMonthHandler(ActionEvent actionEvent) {
+    }
 }

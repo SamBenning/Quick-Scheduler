@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public final class AppointmentDao {
@@ -22,22 +23,7 @@ public final class AppointmentDao {
             Statement statement = JDBC.connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                Appointment newAppointment = new Appointment(
-                        resultSet.getString("Title"),
-                        resultSet.getString("Description"),
-                        resultSet.getString("Location"),
-                        resultSet.getString("Type"),
-                        resultSet.getTimestamp("Start").toLocalDateTime(),
-                        resultSet.getTimestamp("End").toLocalDateTime(),
-                        resultSet.getInt("Customer_ID"),
-                        resultSet.getInt("User_ID"),
-                        resultSet.getInt("Contact_ID")
-                );
-                newAppointment.setAppointmentId(resultSet.getInt("Appointment_ID"));
-                newAppointment.setCustomer(QueryUtil.getCustomerString(newAppointment.getCustomerId()));
-                newAppointment.setUser(QueryUtil.getUserString(newAppointment.getUserId()));
-                newAppointment.setContact(QueryUtil.getContactString(newAppointment.getContactId()));
+                Appointment newAppointment = generateAppointment(resultSet);
                 appointments.add(newAppointment);
             }
         } catch (SQLException throwables) {
@@ -54,7 +40,8 @@ public final class AppointmentDao {
             PreparedStatement preparedStatement = QueryUtil.getAppointmentForCustomerPreparedStatement(customerId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Appointment newAppointment = new Appointment(
+                Appointment newAppointment = generateAppointment(resultSet);
+            /*    Appointment newAppointment = new Appointment(
                         resultSet.getString("Title"),
                         resultSet.getString("Description"),
                         resultSet.getString("Location"),
@@ -64,7 +51,7 @@ public final class AppointmentDao {
                         resultSet.getInt("Customer_ID"),
                         resultSet.getInt("User_ID"),
                         resultSet.getInt("Contact_ID")
-                );
+                );*/
                 appointments.add(newAppointment);
             }
 
@@ -72,6 +59,22 @@ public final class AppointmentDao {
                 e.printStackTrace();
         }
         return  appointments;
+    }
+
+    public static ObservableList<Appointment> getAppointmentsInDateRange(LocalDate firstDate, LocalDate lastDate) {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getAppointmentInDateRange(firstDate, lastDate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = generateAppointment(resultSet);
+                appointments.add(appointment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointments;
     }
 
 
