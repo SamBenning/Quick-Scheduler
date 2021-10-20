@@ -62,6 +62,10 @@ public class ModifyAppointmentController extends AppointmentController implement
         JavaFXUtil.closeWindow(actionEvent);
     }
 
+    public Appointment getSelectedAppointment() {
+        return selectedAppointment;
+    }
+
     private void updateAppInDb() {
         if(AppointmentDao.updateAppointment(selectedAppointment.getAppointmentId(), instantiateAppointment())) {
             appointments.setAll(AppointmentDao.getAllAppointments());

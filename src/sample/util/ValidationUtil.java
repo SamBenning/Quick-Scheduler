@@ -1,8 +1,10 @@
 package sample.util;
 
 import sample.controller.appointmentControllers.AppointmentController;
+import sample.controller.appointmentControllers.ModifyAppointmentController;
 import sample.controller.customerControllers.AddCustomerController;
 import sample.controller.customerControllers.CustomerController;
+import sample.controller.customerControllers.ModifyCustomerController;
 import sample.dao.AppointmentDao;
 import sample.dao.FirstLevelDivisionDao;
 import sample.model.Appointment;
@@ -190,7 +192,13 @@ public abstract class ValidationUtil {
      * Returns false if there is a DateTime overlap for the selected customer. Determines overlap by converting
      * user input to milliseconds, querying the database for all customer appointments and performing a comparison
      * between the max of the start times and the min of the end times. If comparison returns true, then there is overlap
-     * between the two dates.*/
+     * between the two dates.
+     *
+     * Initially this method was return false when attempting to save from the modify customer screen if the date/time
+     * values overlapped with the old date/time values, which is unintended behavior. To work around this, the code now
+     * checks each appointment ID in matchingCustomerApppointments against the selectedAppointment ID so that the
+     * validation comparisons are skipped on a match. This prevents the appointment from being compared to the existing
+     * record in the database for itself.*/
     private static boolean validateCustomerConflicts(AppointmentController controller) {
 
         Instant startTimeInstant = controller.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant();
@@ -200,16 +208,26 @@ public abstract class ValidationUtil {
         ArrayList<Appointment> matchingCustomerAppointments = AppointmentDao.getAppointmentsForCustomer(controller.getSelectedCustomerId());
 
         for (Appointment appointment : matchingCustomerAppointments) {
-            Instant appStartInstant = appointment.getStart().atZone(ZoneId.systemDefault()).toInstant();
-            long appStartMillis = appStartInstant.toEpochMilli();
-            Instant appEndInstant = appointment.getEnd().atZone(ZoneId.systemDefault()).toInstant();
-            long appEndMillis = appEndInstant.toEpochMilli();
-            //Found this solution to determine overlap on StackOverflow: https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
-            if (Long.max(startTimeMillis, appStartMillis) < Long.min(endTimeMillis, appEndMillis)) {
-                errorMessageToDisplay += "\n-Selected customer already has appointment scheduled for date/time range.";
-                return false;
+            try {
+                ModifyAppointmentController modController = (ModifyAppointmentController) controller;
+                if (appointment.getAppointmentId() == modController.getSelectedAppointment().getAppointmentId()) {
+                    continue;
+                }
+            } catch (Exception e) {
+                System.out.println("gotcha");;
             }
-        }
+                Instant appStartInstant = appointment.getStart().atZone(ZoneId.systemDefault()).toInstant();
+                long appStartMillis = appStartInstant.toEpochMilli();
+                Instant appEndInstant = appointment.getEnd().atZone(ZoneId.systemDefault()).toInstant();
+                long appEndMillis = appEndInstant.toEpochMilli();
+                //Found this solution to determine overlap on StackOverflow: https://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
+                if (Long.max(startTimeMillis, appStartMillis) < Long.min(endTimeMillis, appEndMillis)) {
+                    System.out.println("conflict w/ this app: " + appointment.getAppointmentId());
+                    errorMessageToDisplay += "\n-Selected customer already has appointment scheduled for date/time range.";
+                    return false;
+            }
+
+            }
         return true;
     }
 

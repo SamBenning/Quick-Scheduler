@@ -51,7 +51,7 @@ public final class JavaFXUtil {
             //loader.setController(controller);
             loader.setControllerFactory(AddAppointmentController -> new AddAppointmentController((ObservableList<Appointment>) list));
             newWindow.setScene(new Scene(loader.load()));
-            newWindow.show();
+            newWindow.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +66,7 @@ public final class JavaFXUtil {
             //loader.setController(controller);
             loader.setControllerFactory(ModifyAppointmentController -> new ModifyAppointmentController(appointment, list));
             newWindow.setScene(new Scene(loader.load()));
-            newWindow.show();
+            newWindow.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

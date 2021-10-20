@@ -18,9 +18,12 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.MonthDay;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+
+import static java.time.LocalDate.now;
 
 public class MainController implements Initializable {
     public TableView appTableView;
@@ -88,6 +91,8 @@ public class MainController implements Initializable {
         JavaFXUtil.showAddAppWindow(actionEvent,
                 "/sample/view/appointmentViews/addAppointmentForm.fxml",
                 appointments);
+        System.out.println("made it here");
+        refreshAppView();
         //appTableView.setItems(appointments);
     }
 
@@ -98,8 +103,20 @@ public class MainController implements Initializable {
             JavaFXUtil.showModifyAppWindow(actionEvent,
                     "/sample/view/appointmentViews/modifyAppointmentForm.fxml",
                     appointments, appointment);
+            System.out.println("Made it here");
+            refreshAppView();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void refreshAppView() {
+        if (appViewGroup.getSelectedToggle().equals(appViewWeekRadio)) {
+            filterWeek();
+        } else if (appViewGroup.getSelectedToggle().equals(appViewMonthRadio)) {
+            filterMonth();
+        } else {
+            filterAll();
         }
     }
 
@@ -131,20 +148,34 @@ public class MainController implements Initializable {
     }
 
     public void viewAllHandler(ActionEvent actionEvent) {
+        filterAll();
+    }
+
+    public void viewWeekHandler(ActionEvent actionEvent) {
+        filterWeek();
+    }
+
+    public void viewMonthHandler(ActionEvent actionEvent) {
+       filterMonth();
     }
 
     private void filterAll() {
         appointments = AppointmentDao.getAllAppointments();
+        appTableView.setItems(appointments);
     }
 
-    public void viewWeekHandler(ActionEvent actionEvent) {
+    private void filterWeek() {
         DayOfWeek firstDayOfWeek = DayOfWeek.SUNDAY;
         DayOfWeek lastDayOfWeek = DayOfWeek.SATURDAY;
-        LocalDate firstDateOfWeek = LocalDate.now().with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
-        LocalDate lastDateOfWeek = LocalDate.now().with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
+        LocalDate firstDateOfWeek = now().with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+        LocalDate lastDateOfWeek = now().with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
         appTableView.setItems(AppointmentDao.getAppointmentsInDateRange(firstDateOfWeek, lastDateOfWeek));
     }
 
-    public void viewMonthHandler(ActionEvent actionEvent) {
+    private void filterMonth() {
+        LocalDate date = now();
+        LocalDate firstDayOfMonth = date.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
+        appTableView.setItems(AppointmentDao.getAppointmentsInDateRange(firstDayOfMonth, lastDayOfMonth));
     }
 }

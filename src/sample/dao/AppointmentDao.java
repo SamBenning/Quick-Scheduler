@@ -41,17 +41,6 @@ public final class AppointmentDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Appointment newAppointment = generateAppointment(resultSet);
-            /*    Appointment newAppointment = new Appointment(
-                        resultSet.getString("Title"),
-                        resultSet.getString("Description"),
-                        resultSet.getString("Location"),
-                        resultSet.getString("Type"),
-                        resultSet.getTimestamp("Start").toLocalDateTime(),
-                        resultSet.getTimestamp("End").toLocalDateTime(),
-                        resultSet.getInt("Customer_ID"),
-                        resultSet.getInt("User_ID"),
-                        resultSet.getInt("Contact_ID")
-                );*/
                 appointments.add(newAppointment);
             }
 
