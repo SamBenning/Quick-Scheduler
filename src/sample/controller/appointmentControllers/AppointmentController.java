@@ -24,6 +24,7 @@ public abstract class AppointmentController {
     public TextField appDescriptionField;
     public TextField appLocationField;
     public TextField appTypeField;
+    public TextField appIdField;
     public DatePicker appDate;
     public ComboBox appStartTime;
     public ComboBox appEndTime;

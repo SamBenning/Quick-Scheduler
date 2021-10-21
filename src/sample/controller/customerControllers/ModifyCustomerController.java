@@ -30,6 +30,7 @@ public class ModifyCustomerController extends CustomerController implements Init
         customerAddressField.setText(selectedCustomer.getAddress());
         customerPostalField.setText(selectedCustomer.getPostalCode());
         customerPhoneField.setText(selectedCustomer.getPhone());
+        customerIdField.setText(Integer.toString(selectedCustomer.getCustomerId()));
         customerCountryCombo.getSelectionModel().select(customerCountryID-1);
         setInitialDivision(customerDivisionId);
     }

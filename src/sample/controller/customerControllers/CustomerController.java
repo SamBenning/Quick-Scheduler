@@ -16,6 +16,7 @@ public abstract class CustomerController {
     public TextField customerAddressField;
     public TextField customerPostalField;
     public TextField customerPhoneField;
+    public TextField customerIdField;
     public ComboBox<String> customerDivisionCombo;
     public ComboBox<String> customerCountryCombo;
     protected HashMap<String, Integer> countryNameIdMap;

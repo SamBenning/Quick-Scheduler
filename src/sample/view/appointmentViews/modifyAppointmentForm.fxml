@@ -22,6 +22,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="125.0" />
                     </columnConstraints>
                     <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -33,39 +34,41 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Title" />
-                        <TextField fx:id="appTitleField" alignment="CENTER" GridPane.columnIndex="1" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Description" GridPane.rowIndex="1" />
-                        <TextField fx:id="appDescriptionField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Location" GridPane.rowIndex="2" />
-                        <TextField fx:id="appLocationField" alignment="CENTER" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Type" GridPane.rowIndex="3" />
-                        <TextField fx:id="appTypeField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label GridPane.rowIndex="5" />
-                        <Label text="Date" GridPane.rowIndex="4" />
-                        <DatePicker fx:id="appDate" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label text="Start Time" wrapText="true" GridPane.rowIndex="5" />
-                        <Label layoutX="254.0" layoutY="213.0" text="End Time" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                        <Label text="Customer" GridPane.rowIndex="6" />
-                        <Label text="User" GridPane.rowIndex="7" />
-                        <Label text="Contact" GridPane.rowIndex="8" />
-                        <ComboBox fx:id="appCustomerCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <ComboBox fx:id="appUserCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <ComboBox fx:id="appContactCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <HBox alignment="CENTER" fillHeight="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Title" GridPane.rowIndex="1" />
+                        <TextField fx:id="appTitleField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Description" GridPane.rowIndex="2" />
+                        <TextField fx:id="appDescriptionField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Location" GridPane.rowIndex="3" />
+                        <TextField fx:id="appLocationField" alignment="CENTER" prefWidth="192.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" text="Type" GridPane.rowIndex="4" />
+                        <TextField fx:id="appTypeField" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label GridPane.rowIndex="6" />
+                        <Label text="Date" GridPane.rowIndex="5" />
+                        <DatePicker fx:id="appDate" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Start Time" wrapText="true" GridPane.rowIndex="6" />
+                        <Label layoutX="254.0" layoutY="213.0" text="End Time" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <Label text="Customer" GridPane.rowIndex="7" />
+                        <Label text="User" GridPane.rowIndex="8" />
+                        <Label text="Contact" GridPane.rowIndex="9" />
+                        <ComboBox fx:id="appCustomerCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <ComboBox fx:id="appUserCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <ComboBox fx:id="appContactCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <HBox alignment="CENTER" fillHeight="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
                             <children>
                                 <ComboBox fx:id="appStartHourCombo" prefWidth="150.0" />
                                 <ComboBox fx:id="appStartMinuteCombo" prefWidth="150.0" />
                                 <ComboBox fx:id="appStartAmPmCombo" prefWidth="150.0" />
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
                             <children>
                                 <ComboBox fx:id="appEndHourCombo" prefWidth="150.0" />
                                 <ComboBox fx:id="appEndMinuteCombo" prefWidth="150.0" />
                                 <ComboBox fx:id="appEndAmPmCombo" prefWidth="150.0" />
                             </children>
                         </HBox>
+                  <Label text="ID" />
+                  <TextField fx:id="appIdField" disable="true" editable="false" GridPane.columnIndex="1" />
                     </children>
                     <VBox.margin>
                         <Insets left="15.0" />

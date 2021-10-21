@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import sample.controller.customerControllers.ModifyCustomerController;
 import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class ModifyAppointmentController extends AppointmentController implements Initializable {
+
     private Appointment selectedAppointment;
     private HashMap<Integer, String> idToCustomerMap;
     private HashMap<Integer, String> idToUserMap;
@@ -41,6 +43,7 @@ public class ModifyAppointmentController extends AppointmentController implement
         appDescriptionField.setText(selectedAppointment.getDescription());
         appLocationField.setText(selectedAppointment.getLocation());
         appTypeField.setText(selectedAppointment.getType());
+        appIdField.setText(Integer.toString(selectedAppointment.getAppointmentId()));
         selectInitialCustomer();
         selectInitialUser();
         selectInitialContact();
