@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.controller.appointmentControllers.ModifyAppointmentController;
 import sample.controller.customerControllers.AddCustomerController;
@@ -13,6 +14,8 @@ import sample.dao.CustomerDao;
 import sample.model.Appointment;
 import sample.model.Customer;
 import sample.util.JavaFXUtil;
+import sample.util.report.Report;
+import sample.util.report.TypeMonthReport;
 
 import java.net.URL;
 import java.time.DayOfWeek;
@@ -55,6 +58,7 @@ public class MainController implements Initializable {
     public RadioButton appViewWeekRadio;
     public RadioButton appViewMonthRadio;
     public ComboBox reportTypeCombo;
+    public HBox reportComboArea;
 
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers;
@@ -85,6 +89,8 @@ public class MainController implements Initializable {
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
         appViewGroup.selectToggle(appViewAllRadio);
+        reportTypeCombo.setItems(Report.getReports());
+        Report.sethBox(reportComboArea);
     }
 
     public void addAppHandler(ActionEvent actionEvent) {
@@ -181,5 +187,7 @@ public class MainController implements Initializable {
     }
 
     public void selectReportHandler(ActionEvent actionEvent) {
+        Report selection = ((ComboBox<Report>) actionEvent.getSource()).getSelectionModel().getSelectedItem();
+        selection.getOnSelection().onSelectReport();
     }
 }

@@ -11,7 +11,7 @@
             <children>
                 <Label text="MODIFY APPOINTMENT">
                     <font>
-                        <Font size="36.0" />
+                        <Font name="System Bold" size="36.0" />
                     </font>
                 </Label>
                 <GridPane maxWidth="800.0" prefHeight="450.0">

@@ -18,6 +18,7 @@ public final class QueryUtil {
     private static PreparedStatement updateAppointmentPreparedStatement;
     private static PreparedStatement getAppointmentForCustomerPreparedStatement;
     private static PreparedStatement getAppointmentInDateRange;
+    private static PreparedStatement getTypeMonthCountPreparedStatement;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -30,6 +31,8 @@ public final class QueryUtil {
                 "Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? where Appointment_ID = ?;";
         String getAppointmentForCustomerQ = "select * from appointments where Customer_ID = ?";
         String getAppointInDateRangeQ = "select * from appointments where Start between ? and ?;";
+        String getTypeMonthCountQ = "select count(Appointment_ID) as \"Count\" from appointments where Type = ? and" +
+                " (Start between ? and ?);";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
@@ -38,6 +41,7 @@ public final class QueryUtil {
             updateAppointmentPreparedStatement = JDBC.connection.prepareStatement(updateAppointmentQ);
             getAppointmentForCustomerPreparedStatement = JDBC.connection.prepareStatement(getAppointmentForCustomerQ);
             getAppointmentInDateRange = JDBC.connection.prepareStatement(getAppointInDateRangeQ);
+            getTypeMonthCountPreparedStatement = JDBC.connection.prepareStatement(getTypeMonthCountQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -150,6 +154,13 @@ public final class QueryUtil {
         getAppointmentInDateRange.setTimestamp(1, Timestamp.valueOf(firstDate.atStartOfDay()));
         getAppointmentInDateRange.setTimestamp(2, Timestamp.valueOf(secondDate.atTime(23, 59, 59, 999)));
         return getAppointmentInDateRange;
+    }
+
+    public static PreparedStatement getTypeMonthCountPreparedStatement(String type, LocalDateTime monthStart, LocalDateTime monthEnd) throws SQLException {
+        getTypeMonthCountPreparedStatement.setString(1, type);
+        getTypeMonthCountPreparedStatement.setTimestamp(2, Timestamp.valueOf(monthStart));
+        getTypeMonthCountPreparedStatement.setTimestamp(3, Timestamp.valueOf(monthEnd));
+        return getTypeMonthCountPreparedStatement;
     }
 
 }

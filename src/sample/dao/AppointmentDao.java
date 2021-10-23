@@ -5,6 +5,7 @@ package sample.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Appointment;
+import sample.model.AppointmentType;
 import sample.util.QueryUtil;
 
 import java.sql.PreparedStatement;
@@ -12,6 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 
 public final class AppointmentDao {
@@ -52,7 +55,6 @@ public final class AppointmentDao {
 
     public static ObservableList<Appointment> getAppointmentsInDateRange(LocalDate firstDate, LocalDate lastDate) {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-
         try {
             PreparedStatement preparedStatement = QueryUtil.getAppointmentInDateRange(firstDate, lastDate);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -65,6 +67,29 @@ public final class AppointmentDao {
         }
         return appointments;
     }
+
+    public static Integer getTypeMonthCount (AppointmentType type, Month month) {
+        int count = 0;
+        String typeString = type.getName();
+        int startCountYear = 2000;
+        int endCountYear = 2100;
+
+        try {
+            for (int i = startCountYear; i <= endCountYear; i++) {
+
+                LocalDateTime firstDayOfMonth = LocalDate.of(i, month.getValue(), 1).atStartOfDay();
+                LocalDateTime lastDayOfMonth = LocalDate.of(i, month.getValue(), month.minLength()).atTime(23, 59, 59);
+                PreparedStatement preparedStatement = QueryUtil.getTypeMonthCountPreparedStatement(typeString, firstDayOfMonth, lastDayOfMonth);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    count += resultSet.getInt("Count");
+                }
+            }
+        } catch (SQLException e) {
+                return -1;
+            }
+        return count;
+        }
 
 
     public ObservableList<Appointment> getAppointment(String title) throws SQLException {

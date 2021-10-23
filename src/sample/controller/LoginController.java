@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import sample.dao.UserDao;
 import sample.model.AppointmentType;
 import sample.util.JavaFXUtil;
+import sample.util.report.Report;
+import sample.util.report.TypeMonthReport;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -37,6 +39,11 @@ public class LoginController implements Initializable {
             appTypes.add(new AppointmentType("Video Conference"));
             appTypes.add(new AppointmentType("Product Training"));
             AppointmentType.setAllTypes(appTypes);
+
+            ObservableList<Report> reports = FXCollections.observableArrayList();
+            reports.add(new TypeMonthReport("Appointments by Type/Month"));
+            Report.setReports(reports);
+
         };
         Thread initAppTypesThread = new Thread(runnable);
         initAppTypesThread.start();
