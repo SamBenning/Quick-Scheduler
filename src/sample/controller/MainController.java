@@ -54,6 +54,7 @@ public class MainController implements Initializable {
     public ToggleGroup appViewGroup;
     public RadioButton appViewWeekRadio;
     public RadioButton appViewMonthRadio;
+    public ComboBox reportTypeCombo;
 
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers;
@@ -177,5 +178,8 @@ public class MainController implements Initializable {
         LocalDate firstDayOfMonth = date.withDayOfMonth(1);
         LocalDate lastDayOfMonth = date.withDayOfMonth(date.lengthOfMonth());
         appTableView.setItems(AppointmentDao.getAppointmentsInDateRange(firstDayOfMonth, lastDayOfMonth));
+    }
+
+    public void selectReportHandler(ActionEvent actionEvent) {
     }
 }

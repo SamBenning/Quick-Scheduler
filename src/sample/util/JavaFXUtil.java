@@ -72,6 +72,8 @@ public final class JavaFXUtil {
         }
     }
 
+
+
     public static void showAddCustomerWindow(ActionEvent actionEvent, String resourceLocation, ObservableList<Customer> list) {
         try {
             Stage newWindow = new Stage();

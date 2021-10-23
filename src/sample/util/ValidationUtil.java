@@ -119,11 +119,8 @@ public abstract class ValidationUtil {
     }
 
     private static boolean validateType(AppointmentController controller) {
-        if (controller.appTypeField.getText().isBlank()) {
-            errorMessageToDisplay += "\n-Type cannot be blank.";
-            return false;
-        } else if (controller.appTypeField.getText().length() > 50) {
-            errorMessageToDisplay += "\n-Type must be fewer than 50 characters.";
+        if (controller.appTypeCombo.getSelectionModel().isEmpty()) {
+            errorMessageToDisplay += "\n-Type must be selected.";
             return false;
         }
         return true;

@@ -8,10 +8,7 @@ import javafx.scene.control.TextField;
 import sample.dao.ContactDao;
 import sample.dao.CustomerDao;
 import sample.dao.UserDao;
-import sample.model.Appointment;
-import sample.model.Contact;
-import sample.model.Customer;
-import sample.model.User;
+import sample.model.*;
 
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
@@ -23,7 +20,6 @@ public abstract class AppointmentController {
     public TextField appTitleField;
     public TextField appDescriptionField;
     public TextField appLocationField;
-    public TextField appTypeField;
     public TextField appIdField;
     public DatePicker appDate;
     public ComboBox appStartTime;
@@ -39,6 +35,7 @@ public abstract class AppointmentController {
     public ComboBox<String> appContactCombo;
     public Button cancelButton;
     public Button saveButton;
+    public ComboBox appTypeCombo;
     protected ObservableList<Appointment> appointments;
     protected ObservableList<Customer> customers;
     protected HashMap<String, Integer> customerToIdMap;
@@ -104,6 +101,10 @@ public abstract class AppointmentController {
         appContactCombo.getItems().addAll(keys);
     }
 
+    protected void initTypes() {
+        appTypeCombo.getItems().setAll(AppointmentType.getAllTypes());
+    }
+
     protected void initTimeCombos() {
         System.out.println("yoyo");
         ArrayList<String> hours = new ArrayList<>();
@@ -146,7 +147,7 @@ public abstract class AppointmentController {
                 appTitleField.getText(),
                 appDescriptionField.getText(),
                 appLocationField.getText(),
-                appTypeField.getText(),
+                appTypeCombo.getSelectionModel().getSelectedItem().toString(),
                 startDateTime,
                 endDateTime,
                 customerId,
