@@ -12,6 +12,7 @@ import sample.util.JavaFXUtil;
 import sample.util.report.ContactScheduleReport;
 import sample.util.report.Report;
 import sample.util.report.TypeMonthReport;
+import sample.util.report.UserActivityReport;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -44,6 +45,7 @@ public class LoginController implements Initializable {
             ObservableList<Report> reports = FXCollections.observableArrayList();
             reports.add(new TypeMonthReport("Appointment count by Type/Month"));
             reports.add(new ContactScheduleReport("Contact schedule"));
+            reports.add(new UserActivityReport("User database entries"));
             Report.setReports(reports);
 
         };

@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -11,6 +12,7 @@ import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
 import sample.model.Appointment;
 import sample.model.Customer;
+import sample.util.AlertUtil;
 import sample.util.JavaFXUtil;
 import sample.util.report.Report;
 
@@ -126,6 +128,18 @@ public class MainController implements Initializable {
     }
 
     public void deleteAppHandler(ActionEvent actionEvent) {
+        Appointment appointment;
+        try {
+            appointment = appTableView.getSelectionModel().getSelectedItem();
+            if(AppointmentDao.deleteAppointment(appointment)) {
+                System.out.println("Success!");
+                filter();
+            } else {
+                System.out.println("Fail!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addCustomerHandler(ActionEvent actionEvent) {
@@ -150,6 +164,27 @@ public class MainController implements Initializable {
     }
 
     public void deleteCustomerHandler(ActionEvent actionEvent) {
+        Customer customer;
+        try {
+            customer = customerTableView.getSelectionModel().getSelectedItem();
+            ObservableList<Appointment> associatedAppointments = AppointmentDao.getAppointmentsByCustomer(customer);
+            if (!associatedAppointments.isEmpty()) {
+                if (AlertUtil.warnDeleteAssociatedAppointments()) {
+                    for (Appointment appointment : associatedAppointments) {
+                        AppointmentDao.deleteAppointment(appointment);
+                    }
+                    CustomerDao.deleteCustomer(customer);
+                    customerTableView.setItems(CustomerDao.getAllCustomers());
+                }
+            } else {
+                CustomerDao.deleteCustomer(customer);
+                customerTableView.setItems(CustomerDao.getAllCustomers());
+            }
+
+            //CustomerDao.deleteCustomer(customer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void viewAllHandler(ActionEvent actionEvent) {
@@ -162,6 +197,17 @@ public class MainController implements Initializable {
 
     public void viewMonthHandler(ActionEvent actionEvent) {
        filterMonth();
+    }
+
+    private void filter() {
+        RadioButton selectedView = (RadioButton)appViewGroup.getSelectedToggle();
+        if (selectedView.equals(appViewAllRadio)) {
+            filterAll();
+        } else if (selectedView.equals(appViewWeekRadio)) {
+            filterWeek();
+        } else {
+            filterMonth();
+        }
     }
 
     private void filterAll() {

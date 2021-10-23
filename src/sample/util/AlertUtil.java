@@ -11,4 +11,12 @@ public abstract class AlertUtil {
         alert.showAndWait();
     }
 
+    public static boolean warnDeleteAssociatedAppointments() {
+        String alertString = "Are you sure you wish to permanently delete all appointments associated with this customer?";
+        Alert alert = new Alert(Alert.AlertType.WARNING,alertString, ButtonType.YES, ButtonType.NO);
+        alert.setHeaderText("This action will cause appointments to be deleted.");
+        alert.showAndWait();
+        return alert.getResult() == ButtonType.YES;
+    }
+
 }

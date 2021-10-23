@@ -4,9 +4,7 @@ package sample.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import sample.model.Appointment;
-import sample.model.AppointmentType;
-import sample.model.Contact;
+import sample.model.*;
 import sample.util.QueryUtil;
 
 import java.sql.PreparedStatement;
@@ -84,6 +82,36 @@ public final class AppointmentDao {
         return appointments;
     }
 
+    public static ObservableList<Appointment> getAppointmentsByUser(User user) {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getAppointmentsByUserPreparedStatement(user);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = generateAppointment(resultSet);
+                appointments.add(appointment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointments;
+    }
+
+    public static ObservableList<Appointment> getAppointmentsByCustomer(Customer customer) {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getAppointmentsByCustomerPreparedStatement(customer);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = generateAppointment(resultSet);
+                appointments.add(appointment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointments;
+    }
+
     public static Integer getTypeMonthCount (AppointmentType type, Month month) {
         int count = 0;
         String typeString = type.getName();
@@ -148,8 +176,15 @@ public final class AppointmentDao {
         }
     }
 
-    public boolean deleteAppointment (Appointment appointment) throws SQLException {
-        return true;
+    public static boolean deleteAppointment (Appointment appointment) {
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getDeleteAppointmentPreparedStatement(appointment);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private static Appointment generateAppointment (ResultSet resultSet) throws SQLException {

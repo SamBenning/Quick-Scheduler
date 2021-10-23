@@ -4,6 +4,7 @@ import sample.dao.JDBC;
 import sample.model.Appointment;
 import sample.model.Contact;
 import sample.model.Customer;
+import sample.model.User;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -21,6 +22,10 @@ public final class QueryUtil {
     private static PreparedStatement getAppointmentInDateRange;
     private static PreparedStatement getTypeMonthCountPreparedStatement;
     private static PreparedStatement getAppointmentsByContactPreparedStatement;
+    private static PreparedStatement getAppointmentsByUserPreparedStatement;
+    private static PreparedStatement getAppointmentsByCustomerPreparedStatement;
+    private static PreparedStatement getDeleteAppointmentPreparedStatement;
+    private static PreparedStatement getDeleteCustomerPreparedStatement;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -36,6 +41,10 @@ public final class QueryUtil {
         String getTypeMonthCountQ = "select count(Appointment_ID) as \"Count\" from appointments where Type = ? and" +
                 " (Start between ? and ?);";
         String getAppointmentsByContactQ = "select * from appointments where Contact_ID = ?;";
+        String getAppointmentsByUserQ = "select * from appointments where User_ID = ?;";
+        String getAppointmentsByCustomerQ = "select * from appointments where Customer_ID = ?;";
+        String getDeleteAppointmentQ = "delete from appointments where Appointment_ID = ?;";
+        String getDeleteCustomerQ = "delete from customers where Customer_ID = ?;";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
@@ -46,6 +55,10 @@ public final class QueryUtil {
             getAppointmentInDateRange = JDBC.connection.prepareStatement(getAppointInDateRangeQ);
             getTypeMonthCountPreparedStatement = JDBC.connection.prepareStatement(getTypeMonthCountQ);
             getAppointmentsByContactPreparedStatement = JDBC.connection.prepareStatement(getAppointmentsByContactQ);
+            getAppointmentsByUserPreparedStatement = JDBC.connection.prepareStatement(getAppointmentsByUserQ);
+            getDeleteAppointmentPreparedStatement = JDBC.connection.prepareStatement(getDeleteAppointmentQ);
+            getAppointmentsByCustomerPreparedStatement = JDBC.connection.prepareStatement(getAppointmentsByCustomerQ);
+            getDeleteCustomerPreparedStatement = JDBC.connection.prepareStatement(getDeleteCustomerQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -170,6 +183,26 @@ public final class QueryUtil {
     public static PreparedStatement getAppointmentsByContactPreparedStatement(Contact contact) throws SQLException{
         getAppointmentsByContactPreparedStatement.setInt(1, contact.getContactId());
         return  getAppointmentsByContactPreparedStatement;
+    }
+
+    public static PreparedStatement getAppointmentsByUserPreparedStatement(User user) throws SQLException {
+        getAppointmentsByUserPreparedStatement.setInt(1, user.getUserId());
+        return getAppointmentsByUserPreparedStatement;
+    }
+
+    public static PreparedStatement getAppointmentsByCustomerPreparedStatement(Customer customer) throws SQLException {
+        getAppointmentsByCustomerPreparedStatement.setInt(1, customer.getCustomerId());
+        return getAppointmentsByCustomerPreparedStatement;
+    }
+
+    public static PreparedStatement getDeleteAppointmentPreparedStatement(Appointment appointment) throws SQLException {
+        getDeleteAppointmentPreparedStatement.setInt(1, appointment.getAppointmentId());
+        return getDeleteAppointmentPreparedStatement;
+    }
+
+    public static PreparedStatement getDeleteCustomerPreparedStatement(Customer customer) throws SQLException {
+        getDeleteCustomerPreparedStatement.setInt(1, customer.getCustomerId());
+        return getDeleteCustomerPreparedStatement;
     }
 
 }

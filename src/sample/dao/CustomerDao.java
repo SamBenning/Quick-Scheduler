@@ -3,6 +3,7 @@ package sample.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Customer;
+import sample.model.User;
 import sample.util.QueryUtil;
 
 import java.sql.PreparedStatement;
@@ -78,4 +79,26 @@ public final class CustomerDao {
         }
         return null;
     }
+
+    public static boolean deleteCustomer(Customer customer) {
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getDeleteCustomerPreparedStatement(customer);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static Customer generateCustomer(ResultSet resultSet) throws SQLException {
+        return new Customer(
+            resultSet.getInt("Customer_ID"),
+            resultSet.getString("Customer_Name"),
+            resultSet.getString("Address"),
+            resultSet.getString("Postal_Code"),
+            resultSet.getString("Phone"),
+            resultSet.getInt("Division_ID"));
+    }
 }
+

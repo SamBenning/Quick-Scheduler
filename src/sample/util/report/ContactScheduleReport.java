@@ -28,8 +28,7 @@ public class ContactScheduleReport extends Report {
         dynamicComboArea.getChildren().clear();
         dynamicTableArea.getChildren().clear();
         contacts = new ComboBox<>();
-        Insets insets = new Insets(0,0,0,10);
-        HBox.setMargin(contacts, insets);
+        setMargin(contacts);
         contacts.setPromptText("Select contact");
         contacts.getItems().setAll(ContactDao.getAllContacts());
         contacts.addEventHandler(ActionEvent.ACTION,
@@ -53,10 +52,7 @@ public class ContactScheduleReport extends Report {
         TableColumn<Appointment, String> type = new TableColumn<>("Type");
         TableColumn<Appointment, LocalDateTime> start = new TableColumn<>("Start");
         TableColumn<Appointment, LocalDateTime> end = new TableColumn<>("End");
-        //TableColumn<Appointment, Customer> customer = new TableColumn<>("Customer");
-
-
-
+        TableColumn<Appointment, Integer> customer = new TableColumn<>("Customer_ID");
 
         id.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
         title.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -65,7 +61,7 @@ public class ContactScheduleReport extends Report {
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
         start.setCellValueFactory(new PropertyValueFactory<>("start"));
         end.setCellValueFactory(new PropertyValueFactory<>("end"));
-       // customer.setCellValueFactory();
+        customer.setCellValueFactory(new PropertyValueFactory<>("customerId"));
 
         appointmentTableView.getColumns().add(id);
         appointmentTableView.getColumns().add(title);
@@ -74,6 +70,7 @@ public class ContactScheduleReport extends Report {
         appointmentTableView.getColumns().add(type);
         appointmentTableView.getColumns().add(start);
         appointmentTableView.getColumns().add(end);
+        appointmentTableView.getColumns().add(customer);
         appointmentTableView.setItems(AppointmentDao.getAppointmentsByContact(contact));
         dynamicTableArea.getChildren().add(appointmentTableView);
     }

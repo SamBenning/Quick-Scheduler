@@ -30,8 +30,7 @@ public class TypeMonthReport extends Report{
     public static void askType() {
         types = new ComboBox<>();
         types.setPromptText("Select appointment type");
-        Insets insets = new Insets(0,0,0,10);
-        HBox.setMargin(types, insets);
+        setMargin(types);
         types.getItems().addAll(AppointmentType.getAllTypes());
         types.addEventHandler(ActionEvent.ACTION,
                 actionEvent -> setType(actionEvent));
@@ -41,8 +40,7 @@ public class TypeMonthReport extends Report{
     public static void askMonth() {
         months = new ComboBox<>();
         months.setPromptText("Select month");
-        Insets insets = new Insets(0,0,0,10);
-        HBox.setMargin(months, insets);
+        setMargin(months);
         months.getItems().addAll(Month.values());
         months.addEventHandler(ActionEvent.ACTION,
                 actionEvent -> setMonth(actionEvent));
@@ -68,8 +66,7 @@ public class TypeMonthReport extends Report{
         if (totalLabel == null) {
             totalLabel = new Label("COUNT: ");
             totalLabel.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 12.0));
-            Insets insets = new Insets(0,0,0,10);
-            HBox.setMargin(totalLabel, insets);
+            setMargin(totalLabel);
             dynamicComboArea.getChildren().add(totalLabel);
         }
         if (totalCount == null) {

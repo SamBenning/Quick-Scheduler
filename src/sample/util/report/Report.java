@@ -1,6 +1,9 @@
 package sample.util.report;
 
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 public abstract class Report {
@@ -47,5 +50,15 @@ public abstract class Report {
 
     public static void setDynamicTableArea(HBox dynamicTableArea) {
         Report.dynamicTableArea = dynamicTableArea;
+    }
+
+    protected static void setMargin(ComboBox<?> element) {
+        Insets insets = new Insets(0,0,0,10);
+        HBox.setMargin(element, insets);
+    }
+
+    protected static void setMargin(Label element) {
+        Insets insets = new Insets(0,0,0,10);
+        HBox.setMargin(element, insets);
     }
 }
