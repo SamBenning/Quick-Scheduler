@@ -103,4 +103,9 @@ public class Customer {
     public void setDivisionId(int divisionId) {
         this.divisionId = divisionId;
     }
+
+    @Override
+    public String toString() {
+        return customerName + " (ID: " + customerId + ")";
+    }
 }

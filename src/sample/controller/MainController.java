@@ -7,49 +7,44 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import sample.controller.appointmentControllers.AddAppointmentController;
-import sample.controller.appointmentControllers.ModifyAppointmentController;
-import sample.controller.customerControllers.AddCustomerController;
 import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
 import sample.model.Appointment;
 import sample.model.Customer;
 import sample.util.JavaFXUtil;
 import sample.util.report.Report;
-import sample.util.report.TypeMonthReport;
 
 import java.net.URL;
 import java.time.DayOfWeek;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.MonthDay;
+import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import static java.time.LocalDate.now;
 
 public class MainController implements Initializable {
-    public TableView appTableView;
-    public TableColumn appIdCol;
-    public TableColumn appTitleCol;
-    public TableColumn appDescriptionCol;
-    public TableColumn appLocationCol;
-    public TableColumn appTypeCol;
-    public TableColumn appStartCol;
-    public TableColumn appEndCol;
-    public TableColumn appCustomerCol;
-    public TableColumn appUserCol;
-    public TableColumn appContactCol;
+    public TableView<Appointment> appTableView;
+    public TableColumn<Appointment, Integer> appIdCol;
+    public TableColumn<Appointment, String> appTitleCol;
+    public TableColumn<Appointment, String> appDescriptionCol;
+    public TableColumn<Appointment, String> appLocationCol;
+    public TableColumn<Appointment, String> appTypeCol;
+    public TableColumn<Appointment, LocalDateTime> appStartCol;
+    public TableColumn<Appointment, LocalDateTime> appEndCol;
+    public TableColumn<Appointment, String> appCustomerCol;
+    public TableColumn<Appointment, String> appUserCol;
+    public TableColumn<Appointment, String> appContactCol;
     public Button addAppButton;
     public Button modifyAppButton;
     public Button deleteAppButton;
-    public TableView customerTableView;
-    public TableColumn customerIdCol;
-    public TableColumn customerNameCol;
-    public TableColumn customerAddressCol;
-    public TableColumn customerPostalCol;
-    public TableColumn customerPhoneCol;
-    public TableColumn customerDivisionCol;
+    public TableView<Customer> customerTableView;
+    public TableColumn<Customer, Integer> customerIdCol;
+    public TableColumn<Customer, String> customerNameCol;
+    public TableColumn<Customer, String> customerAddressCol;
+    public TableColumn<Customer, String> customerPostalCol;
+    public TableColumn<Customer, String> customerPhoneCol;
+    public TableColumn<Customer, Integer> customerDivisionCol;
     public Button addCustomerButton;
     public Button modifyCustomerButton;
     public Button deleteCustomerButton;
@@ -57,8 +52,10 @@ public class MainController implements Initializable {
     public ToggleGroup appViewGroup;
     public RadioButton appViewWeekRadio;
     public RadioButton appViewMonthRadio;
-    public ComboBox reportTypeCombo;
+    public ComboBox<Report> reportTypeCombo;
     public HBox reportComboArea;
+    public HBox reportDynamicComboArea;
+    public HBox reportDynamicTableArea;
 
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers;
@@ -90,7 +87,8 @@ public class MainController implements Initializable {
 
         appViewGroup.selectToggle(appViewAllRadio);
         reportTypeCombo.setItems(Report.getReports());
-        Report.sethBox(reportComboArea);
+        Report.setDynamicComboArea(reportDynamicComboArea);
+        Report.setDynamicTableArea(reportDynamicTableArea);
     }
 
     public void addAppHandler(ActionEvent actionEvent) {

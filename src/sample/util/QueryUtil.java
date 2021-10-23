@@ -2,6 +2,7 @@ package sample.util;
 
 import sample.dao.JDBC;
 import sample.model.Appointment;
+import sample.model.Contact;
 import sample.model.Customer;
 
 import java.sql.*;
@@ -19,6 +20,7 @@ public final class QueryUtil {
     private static PreparedStatement getAppointmentForCustomerPreparedStatement;
     private static PreparedStatement getAppointmentInDateRange;
     private static PreparedStatement getTypeMonthCountPreparedStatement;
+    private static PreparedStatement getAppointmentsByContactPreparedStatement;
 
     static {
         String addCustomerQ = "insert into customers(Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
@@ -33,6 +35,7 @@ public final class QueryUtil {
         String getAppointInDateRangeQ = "select * from appointments where Start between ? and ?;";
         String getTypeMonthCountQ = "select count(Appointment_ID) as \"Count\" from appointments where Type = ? and" +
                 " (Start between ? and ?);";
+        String getAppointmentsByContactQ = "select * from appointments where Contact_ID = ?;";
         try {
             addCustomerPreparedStatement = JDBC.connection.prepareStatement(addCustomerQ);
             updateCustomerPreparedStatement = JDBC.connection.prepareStatement(updateCustomerQ);
@@ -42,6 +45,7 @@ public final class QueryUtil {
             getAppointmentForCustomerPreparedStatement = JDBC.connection.prepareStatement(getAppointmentForCustomerQ);
             getAppointmentInDateRange = JDBC.connection.prepareStatement(getAppointInDateRangeQ);
             getTypeMonthCountPreparedStatement = JDBC.connection.prepareStatement(getTypeMonthCountQ);
+            getAppointmentsByContactPreparedStatement = JDBC.connection.prepareStatement(getAppointmentsByContactQ);
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -161,6 +165,11 @@ public final class QueryUtil {
         getTypeMonthCountPreparedStatement.setTimestamp(2, Timestamp.valueOf(monthStart));
         getTypeMonthCountPreparedStatement.setTimestamp(3, Timestamp.valueOf(monthEnd));
         return getTypeMonthCountPreparedStatement;
+    }
+
+    public static PreparedStatement getAppointmentsByContactPreparedStatement(Contact contact) throws SQLException{
+        getAppointmentsByContactPreparedStatement.setInt(1, contact.getContactId());
+        return  getAppointmentsByContactPreparedStatement;
     }
 
 }

@@ -136,8 +136,10 @@
                                           <Insets left="10.0" />
                                        </HBox.margin>
                                     </ComboBox>
+                                    <HBox fx:id="reportDynamicComboArea" alignment="CENTER_LEFT" />
                                  </children>
                               </HBox>
+                              <HBox fx:id="reportDynamicTableArea" />
                            </children>
                         </VBox>
                      </content></Tab>

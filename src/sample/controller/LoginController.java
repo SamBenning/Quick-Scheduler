@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import sample.dao.UserDao;
 import sample.model.AppointmentType;
 import sample.util.JavaFXUtil;
+import sample.util.report.ContactScheduleReport;
 import sample.util.report.Report;
 import sample.util.report.TypeMonthReport;
 
@@ -41,7 +42,8 @@ public class LoginController implements Initializable {
             AppointmentType.setAllTypes(appTypes);
 
             ObservableList<Report> reports = FXCollections.observableArrayList();
-            reports.add(new TypeMonthReport("Appointments by Type/Month"));
+            reports.add(new TypeMonthReport("Appointment count by Type/Month"));
+            reports.add(new ContactScheduleReport("Contact schedule"));
             Report.setReports(reports);
 
         };

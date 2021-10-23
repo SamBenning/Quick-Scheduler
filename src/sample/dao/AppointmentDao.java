@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sample.model.Appointment;
 import sample.model.AppointmentType;
+import sample.model.Contact;
 import sample.util.QueryUtil;
 
 import java.sql.PreparedStatement;
@@ -57,6 +58,21 @@ public final class AppointmentDao {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
             PreparedStatement preparedStatement = QueryUtil.getAppointmentInDateRange(firstDate, lastDate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = generateAppointment(resultSet);
+                appointments.add(appointment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointments;
+    }
+
+    public static ObservableList<Appointment> getAppointmentsByContact(Contact contact) {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getAppointmentsByContactPreparedStatement(contact);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Appointment appointment = generateAppointment(resultSet);

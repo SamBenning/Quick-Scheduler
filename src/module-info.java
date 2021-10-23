@@ -11,6 +11,7 @@ module C195 {
     exports sample.controller.customerControllers;
     exports sample.controller.appointmentControllers;
     exports sample.model;
+    exports sample.util.report;
     opens sample.controller to javafx.graphics;
     opens sample.model to javafx.base;
 }
