@@ -128,17 +128,19 @@ public class MainController implements Initializable {
     }
 
     public void deleteAppHandler(ActionEvent actionEvent) {
-        Appointment appointment;
-        try {
-            appointment = appTableView.getSelectionModel().getSelectedItem();
-            if(AppointmentDao.deleteAppointment(appointment)) {
-                System.out.println("Success!");
-                filter();
-            } else {
-                System.out.println("Fail!");
+        if (AlertUtil.confirmDeletion()){
+            Appointment appointment;
+            try {
+                appointment = appTableView.getSelectionModel().getSelectedItem();
+                if(AppointmentDao.deleteAppointment(appointment)) {
+                    System.out.println("Success!");
+                    filter();
+                } else {
+                    System.out.println("Fail!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -164,26 +166,28 @@ public class MainController implements Initializable {
     }
 
     public void deleteCustomerHandler(ActionEvent actionEvent) {
-        Customer customer;
-        try {
-            customer = customerTableView.getSelectionModel().getSelectedItem();
-            ObservableList<Appointment> associatedAppointments = AppointmentDao.getAppointmentsByCustomer(customer);
-            if (!associatedAppointments.isEmpty()) {
-                if (AlertUtil.warnDeleteAssociatedAppointments()) {
-                    for (Appointment appointment : associatedAppointments) {
-                        AppointmentDao.deleteAppointment(appointment);
+        if(AlertUtil.confirmDeletion()) {
+            Customer customer;
+            try {
+                customer = customerTableView.getSelectionModel().getSelectedItem();
+                ObservableList<Appointment> associatedAppointments = AppointmentDao.getAppointmentsByCustomer(customer);
+                if (!associatedAppointments.isEmpty()) {
+                    if (AlertUtil.warnDeleteAssociatedAppointments()) {
+                        for (Appointment appointment : associatedAppointments) {
+                            AppointmentDao.deleteAppointment(appointment);
+                        }
+                        CustomerDao.deleteCustomer(customer);
+                        customerTableView.setItems(CustomerDao.getAllCustomers());
                     }
+                } else {
                     CustomerDao.deleteCustomer(customer);
                     customerTableView.setItems(CustomerDao.getAllCustomers());
                 }
-            } else {
-                CustomerDao.deleteCustomer(customer);
-                customerTableView.setItems(CustomerDao.getAllCustomers());
-            }
 
-            //CustomerDao.deleteCustomer(customer);
-        } catch (Exception e) {
-            e.printStackTrace();
+                //CustomerDao.deleteCustomer(customer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
