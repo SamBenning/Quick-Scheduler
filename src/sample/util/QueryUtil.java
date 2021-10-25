@@ -6,11 +6,22 @@ import sample.model.Contact;
 import sample.model.Customer;
 import sample.model.User;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
+/**
+ * Utility class that generates and stores all of the PreparedStatements used in the DAO classes to query.
+ * Provides a number of methods that take in either a model object instance, or an id that it is used to query
+ * or update the database. PreparedStatements are saved to member variables appropriated named, and each
+ * member method will set the parameters of the PreparedStatement before returning it.
+ * These methods are all very straightforward, so no specific comments are provided for them.
+ * <br>
+ * The static block is used to ensure all of the PreparedStatements have been build and saved to the appropriate
+ * member variable.*/
 public final class QueryUtil {
     
     private static PreparedStatement addCustomerPreparedStatement;
@@ -97,15 +108,12 @@ public final class QueryUtil {
                 "Type, Start, End, Customer_ID, User_ID, Contact_ID) values(?,?,?,?,?,?,?,?,?)";
 
 
-        LocalDateTime startLocalDateTime = appointment.getStart();
-        LocalDateTime endLocalDateTime = appointment.getEnd();
+        LocalDateTime startLocalDateTime;
+        LocalDateTime endLocalDateTime;
         // Found this solution on stackoverflow:
         // https://stackoverflow.com/questions/34626382/convert-localdatetime-to-localdatetime-in-utc
         startLocalDateTime = appointment.getStart(); //startLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
         endLocalDateTime = appointment.getEnd(); //endLocalDateTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
-
-
-        DateTimeFormatter sqlFormatter = DateTimeFormatter.ISO_DATE_TIME;
         PreparedStatement preparedStatement = JDBC.connection.prepareStatement(query);
         preparedStatement.setString(1, appointment.getTitle());
         preparedStatement.setString(2, appointment.getDescription());

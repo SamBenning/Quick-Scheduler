@@ -7,7 +7,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import sample.dao.AppointmentDao;
 import sample.model.AppointmentType;
-
 import java.time.Month;
 
 /**
