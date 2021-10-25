@@ -11,6 +11,8 @@ import sample.model.Customer;
 import sample.model.FirstLevelDivision;
 import java.util.HashMap;
 
+/**
+ * Abstract CustomerController class which holds the bulk of the methods and member variables for the other customer controllers.*/
 public abstract class CustomerController {
     public TextField customerNameField;
     public TextField customerAddressField;
@@ -25,6 +27,9 @@ public abstract class CustomerController {
     protected ObservableList<String> countryNames;
     protected ObservableList<String> divisionNames;
 
+    /**
+     * Sets up combo boxes.
+     * @param customers List of all the customers in the main menu customers table view.*/
     public CustomerController(ObservableList<Customer> customers) {
         this.countryNameIdMap = new HashMap<>();
         this.countries = CountryDao.getAllCountries();
@@ -34,6 +39,8 @@ public abstract class CustomerController {
         initCountries();
     }
 
+    /**
+     * Initializes the countries combo box.*/
     private void initCountries() {
         for (Country country : countries) {
             String name = country.getCountryName();
@@ -43,6 +50,8 @@ public abstract class CustomerController {
         }
     }
 
+    /**
+     * Creates a customer object to be used by add and modify controllers for CRUD operations.*/
     protected Customer instantiateCustomer() {
         int selectedDivisionId = FirstLevelDivisionDao.getDivisionId(
                 customerDivisionCombo.getSelectionModel().getSelectedItem());
@@ -57,12 +66,18 @@ public abstract class CustomerController {
         );
     }
 
+    /**
+     * Fires when the user selects an option int he country combo box. Calls the setDivisionList method, which performs
+     * filtering before displaying division list.*/
     public void selectCountryHandler() {
         customerDivisionCombo.getItems().clear();
         divisionNames.clear();
         setDivisionList();
     }
 
+    /**
+     * Calls FirstLevelDivisionDao and passes in the countryId obtained from country combo to get a list of divisions
+     * belonging to that country. Then, populates the division combo appropriately.*/
     public void setDivisionList() {
         divisionNames.clear();
         String selection = customerCountryCombo.getSelectionModel().getSelectedItem();

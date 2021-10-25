@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import sample.controller.Controller;
 import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.controller.appointmentControllers.ModifyAppointmentController;
 import sample.controller.customerControllers.AddCustomerController;

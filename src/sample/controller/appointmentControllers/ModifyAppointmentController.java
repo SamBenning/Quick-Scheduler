@@ -19,6 +19,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+/**
+ * Controller class for Modify Appointment form. Handles initializing combo boxes and reading in data from the selected
+ * appointment to pre-populate all fields and combo boxes.*/
 public class ModifyAppointmentController extends AppointmentController implements Initializable {
 
     private Appointment selectedAppointment;
@@ -26,11 +29,16 @@ public class ModifyAppointmentController extends AppointmentController implement
     private HashMap<Integer, String> idToUserMap;
     private HashMap<Integer, String> idToContactMap;
 
+    /**
+     * @param appointments List of all appointments from main menu
+     * @param selectedAppointment Whichever appointment was selected in table view when user clicked modify.*/
     public ModifyAppointmentController(Appointment selectedAppointment, ObservableList<Appointment> appointments) {
         super(appointments);
         this.selectedAppointment = selectedAppointment;
     }
 
+    /**
+     * Initializes combo boxes, pre-selects appropriate option for each combo box, reads in data to text fields.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initCustomers(customers);
@@ -53,6 +61,9 @@ public class ModifyAppointmentController extends AppointmentController implement
         selectInitialTimes();
     }
 
+    /**
+     * Sets dates and times and calls ValidationUtil to validate data. If valid, updates appointment in the database
+     * by calling updateAppInDb.*/
     public void saveButtonHandler(ActionEvent actionEvent) {
         setDate();
         setStartDateTime();
@@ -63,20 +74,29 @@ public class ModifyAppointmentController extends AppointmentController implement
         }
     }
 
+    /**
+     * Closes the window and returns to main menu.*/
     public void cancelButtonHandler(ActionEvent actionEvent) {
         JavaFXUtil.closeWindow(actionEvent);
     }
 
+    /**
+     * Returns the appointment that was passed in from the main menu.*/
     public Appointment getSelectedAppointment() {
         return selectedAppointment;
     }
 
+    /**
+     * Passes the appointment ID of the selectedAppointment from main menu and the new appointment object to
+     * AppointmentDao,updateAppointment so that values can be properly updated.*/
     private void updateAppInDb() {
         if(AppointmentDao.updateAppointment(selectedAppointment.getAppointmentId(), instantiateAppointment())) {
             appointments.setAll(AppointmentDao.getAllAppointments());
         }
     }
 
+    /**
+     * Pre-selects proper customer option in customer combo box.*/
     private void selectInitialCustomer() {
         Customer customer = CustomerDao.getCustomer(selectedAppointment.getCustomerId());
         for (Map.Entry<String, Integer> entry : customerToIdMap.entrySet()) {
@@ -86,6 +106,8 @@ public class ModifyAppointmentController extends AppointmentController implement
         appCustomerCombo.getSelectionModel().select(selection);
     }
 
+    /**
+     * Pre-selects proper user option in user combo box.*/
     private void selectInitialUser() {
         for (Map.Entry<String, Integer> entry: userToIdMap.entrySet()) {
             idToUserMap.put(entry.getValue(), entry.getKey());
@@ -94,6 +116,8 @@ public class ModifyAppointmentController extends AppointmentController implement
         appUserCombo.getSelectionModel().select(selection);
     }
 
+    /**
+     * Pre-selects proper contact option in contact combo box.*/
     private void selectInitialContact() {
         for (Map.Entry<String, Integer> entry: contactToIdMap.entrySet()) {
             idToContactMap.put(entry.getValue(), entry.getKey());
@@ -102,11 +126,15 @@ public class ModifyAppointmentController extends AppointmentController implement
         appContactCombo.getSelectionModel().select(selection);
     }
 
+    /**
+     * Pre-selects proper date in the date picker.*/
     private void selectInitialDate() {
         LocalDate date = selectedAppointment.getStart().toLocalDate();
         appDate.setValue(date);
     }
 
+    /**
+     * Reads LocalTimes and pre-selects all of the time combos to represent to correct time for selected appointment.*/
     private void selectInitialTimes() {
         LocalTime startTime = selectedAppointment.getStart().toLocalTime();
         LocalTime endTime = selectedAppointment.getEnd().toLocalTime();
@@ -130,6 +158,12 @@ public class ModifyAppointmentController extends AppointmentController implement
         }
     }
 
+    /**
+     * Given an int value and a combo box, returns the index of the comboBox item matching that value. The selectInitialTimes
+     * method passes hour and minute values, and this method then returns the index matching that value.
+     * @param value The value being searched for.
+     * @param comboBox The combo box to search.
+     * @param convertTo12Hour Used to account for 12-hour times.*/
     private int findMatchIndexInCombo(int value, ComboBox<String> comboBox, boolean convertTo12Hour) {
         int index = 0;
         if (convertTo12Hour && value > 12) { value -= 12;}

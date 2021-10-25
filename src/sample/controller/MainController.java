@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
@@ -20,6 +22,7 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 
@@ -58,6 +61,8 @@ public class MainController implements Initializable {
     public HBox reportComboArea;
     public HBox reportDynamicComboArea;
     public HBox reportDynamicTableArea;
+    public Label appStatusLabel;
+    public Label customerStatusLabel;
 
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers;
@@ -86,6 +91,7 @@ public class MainController implements Initializable {
         customerPostalCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
+
 
         appViewGroup.selectToggle(appViewAllRadio);
         reportTypeCombo.setItems(Report.getReports());
@@ -133,10 +139,11 @@ public class MainController implements Initializable {
             try {
                 appointment = appTableView.getSelectionModel().getSelectedItem();
                 if(AppointmentDao.deleteAppointment(appointment)) {
-                    System.out.println("Success!");
                     filter();
+                    appStatusLabel.setText(appointment.toString() + " was successfully deleted.");
+                    appStatusLabel.setTextFill(Color.color(0,1,0));
                 } else {
-                    System.out.println("Fail!");
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -178,10 +185,14 @@ public class MainController implements Initializable {
                         }
                         CustomerDao.deleteCustomer(customer);
                         customerTableView.setItems(CustomerDao.getAllCustomers());
+                        customerStatusLabel.setText(customer.toString() + " was successfully deleted.");
+                        customerStatusLabel.setTextFill(Color.color(0,1,0));
                     }
                 } else {
                     CustomerDao.deleteCustomer(customer);
                     customerTableView.setItems(CustomerDao.getAllCustomers());
+                    customerStatusLabel.setText(customer.toString() + " was successfully deleted.");
+                    customerStatusLabel.setTextFill(Color.color(0,1,0));
                 }
 
                 //CustomerDao.deleteCustomer(customer);

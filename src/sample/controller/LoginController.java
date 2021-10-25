@@ -53,9 +53,6 @@ public class LoginController implements Initializable {
             localIdLabel.setText(localIdLabel.getText() + " " + ZoneId.systemDefault());
         }
 
-        
-        
-
         /**
          * ~~LAMBDA EXPRESSION~~
          * <br>
@@ -89,7 +86,7 @@ public class LoginController implements Initializable {
         passwordField.clear();
         if (credentialsValid) {
             JavaFXUtil.changeWindow(actionEvent,
-                    "/sample/view/mainForm.fxml",900, 500);
+                    "/sample/view/mainForm.fxml",1000, 550);
         } else {
             AlertUtil.showInvalidCredentialsAlert(Locale.getDefault(), rb);
         }
@@ -148,5 +145,4 @@ public class LoginController implements Initializable {
         printWriter.append( "\n \t" + "Successful: " + success);
         printWriter.close();
     }
-
 }

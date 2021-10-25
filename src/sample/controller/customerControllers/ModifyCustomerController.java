@@ -12,15 +12,21 @@ import sample.util.ValidationUtil;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the modify customer form.*/
 public class ModifyCustomerController extends CustomerController implements Initializable {
 
     private final Customer selectedCustomer;//Will need to be passed in from MainController
 
+    /**
+     * Sets selectedCustomer passed in from the main menu.*/
     public ModifyCustomerController(Customer selectedCustomer, ObservableList<Customer> customers) {
         super(customers);
         this.selectedCustomer = selectedCustomer;
     }
 
+    /**
+     * Sets up combo boxes and calls functions to read in data and get everything pre-filled/pre-selected.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerCountryCombo.getItems().addAll(countryNames);
@@ -35,10 +41,14 @@ public class ModifyCustomerController extends CustomerController implements Init
         setInitialDivision(customerDivisionId);
     }
 
+    /**
+     * Closes the window and returns to the main menu.*/
     public void cancelButtonHandler(ActionEvent actionEvent) {
         JavaFXUtil.closeWindow(actionEvent);
     }
 
+    /**
+     * If ValidationUtil.validateCustomer returns true, calls updateCustomerInDb.*/
     public void saveButtonHandler(ActionEvent actionEvent) {
         if(ValidationUtil.validateCustomer(this)) {
             updateCustomerInDb();
@@ -46,6 +56,10 @@ public class ModifyCustomerController extends CustomerController implements Init
         }
     }
 
+    /**
+     * Calls instantiateCustomer. Passes that customer object and the customer id from selectedCustomer into
+     * CustomerDao,updateCustomer so database entry can be properly updated. Updates customers so changes are refelcted
+     * in the main menu.*/
     private void updateCustomerInDb() {
         Customer updatedCustomer = instantiateCustomer();
         updatedCustomer.setCustomerId(selectedCustomer.getCustomerId());
@@ -54,6 +68,8 @@ public class ModifyCustomerController extends CustomerController implements Init
         }
     }
 
+    /**
+     * Handles selecting the initial division.*/
     private void setInitialDivision(int divisionId) {
         setDivisionList();
         String divisionName = FirstLevelDivisionDao.getDivisionName(divisionId);
