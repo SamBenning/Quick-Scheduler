@@ -1,20 +1,19 @@
 package sample.util.report;
 
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import sample.dao.AppointmentDao;
 import sample.dao.ContactDao;
 import sample.model.Appointment;
 import sample.model.Contact;
-import sample.model.Customer;
 
 import java.time.LocalDateTime;
 
+/**
+ *Defines the Contact Schedule report type. */
 public class ContactScheduleReport extends Report {
 
     private static Contact contact;
@@ -24,6 +23,11 @@ public class ContactScheduleReport extends Report {
         super(name);
     }
 
+    /**
+     * Generates a ComboBox containing a list of contacts queried from the database and displays it in dynamicComboArea.
+     * Also adds an event handler to the combo box so that when a selection is made, the setContact method is called.
+     * Both the dynamicComboArea and dynamicTableArea are cleared to get rid of anything displayed by previously selected
+     * reports.*/
     public static void askContact() {
         dynamicComboArea.getChildren().clear();
         dynamicTableArea.getChildren().clear();
@@ -36,11 +40,18 @@ public class ContactScheduleReport extends Report {
         dynamicComboArea.getChildren().add(contacts);
     }
 
+    /**
+     * Saves the contact that was selected in the combo box to the contact member variable. Calls setTable, which
+     * will generate a tableview based on the contact.*/
     public static void setContact() {
         contact = contacts.getSelectionModel().getSelectedItem();
         setTable();
     }
 
+    /**
+     * Generates a table view based on the contact member variable. The table displays a schedule for the selected contact
+     * in the dynamicTableArea.
+     * */
     private static void setTable() {
         dynamicTableArea.getChildren().clear();
         TableView<Appointment> appointmentTableView = new TableView<>();
@@ -75,6 +86,14 @@ public class ContactScheduleReport extends Report {
         dynamicTableArea.getChildren().add(appointmentTableView);
     }
 
+    /**
+     * ~~LAMBDA EXPRESSION~~
+     * <br>
+     * Provides a lambda expression returning the function. The lambda expression is useful in this case because it allows
+     * any of the report subclass on selection functionality to be called from the MainMenu. The Main Controller simply
+     * gets the selected report class form a combo box and calls selection.getOnSelection.onSelectReport. Each Report
+     * subclass simply has to define its required functionality in the getOnSelection method and return it as a callback,
+     * which the lambda expression does in a concise manner.*/
     @Override
     public ReportListener getOnSelection() {
         return () -> askContact();

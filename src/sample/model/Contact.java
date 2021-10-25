@@ -1,8 +1,7 @@
 package sample.model;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
+/**
+ * Model object class to represent contact records from the database.*/
 public class Contact {
     private int contactId;
     private String contactName;
@@ -24,24 +23,8 @@ public class Contact {
         return contactId;
     }
 
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
-    }
-
     public String getContactName() {
         return contactName;
-    }
-
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override

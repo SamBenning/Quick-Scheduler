@@ -2,6 +2,8 @@ package sample.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * Model object class to represent appointment records from the database.*/
 public class Appointment {
 
     private int appointmentId;
@@ -11,9 +13,9 @@ public class Appointment {
     private String type;
     private LocalDateTime start;
     private LocalDateTime end;
-    private int customerId;
-    private int userId;
-    private int contactId;
+    private final int customerId;
+    private final int userId;
+    private final int contactId;
     private String customer;
     private String user;
     private String contact;
@@ -49,10 +51,6 @@ public class Appointment {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getLocation() {
@@ -115,24 +113,12 @@ public class Appointment {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
     public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public int getContactId() {
         return contactId;
-    }
-
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
     }
 
     @Override
