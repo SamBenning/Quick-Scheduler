@@ -1,6 +1,5 @@
 package sample.controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -8,8 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.util.Callback;
-import sample.controller.appointmentControllers.AddAppointmentController;
 import sample.dao.AppointmentDao;
 import sample.dao.CustomerDao;
 import sample.model.Appointment;
@@ -22,12 +19,13 @@ import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ResourceBundle;
 
 import static java.time.LocalDate.now;
 
+/**
+ * Controller for the main menu of the application.*/
 public class MainController implements Initializable {
     public TableView<Appointment> appTableView;
     public TableColumn<Appointment, Integer> appIdCol;
@@ -67,6 +65,9 @@ public class MainController implements Initializable {
     private ObservableList<Appointment> appointments;
     private ObservableList<Customer> customers;
 
+    /**
+     * Initializes table views for appointments and customers. Initializes appointment view toggle. Populates
+     * reportTypeCombo, and does some setup for the Report abstract class so that the reports can work properly.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -99,8 +100,10 @@ public class MainController implements Initializable {
         Report.setDynamicTableArea(reportDynamicTableArea);
     }
 
+    /**
+     * Displays the add appointment form.*/
     public void addAppHandler(ActionEvent actionEvent) {
-        AddAppointmentController addAppointmentController = new AddAppointmentController(appointments);
+        //AddAppointmentController addAppointmentController = new AddAppointmentController(appointments);
         JavaFXUtil.showAddAppWindow(actionEvent,
                 "/sample/view/appointmentViews/addAppointmentForm.fxml",
                 appointments);
@@ -109,20 +112,24 @@ public class MainController implements Initializable {
         //appTableView.setItems(appointments);
     }
 
+    /** Displays the modify appointment form. Uses try/catch in case user clicks modify without selecting an appointment
+     * in the table view.*/
     public void modifyAppHandler(ActionEvent actionEvent) {
         Appointment appointment;
         try {
-            appointment = (Appointment) appTableView.getSelectionModel().getSelectedItem();
+            appointment = appTableView.getSelectionModel().getSelectedItem();
             JavaFXUtil.showModifyAppWindow(actionEvent,
                     "/sample/view/appointmentViews/modifyAppointmentForm.fxml",
                     appointments, appointment);
             System.out.println("Made it here");
             refreshAppView();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("No appointment selected.");
         }
     }
 
+    /**
+     * Checks which view toggle is selected, and calls the appropriate filter function to update the tableview.*/
     private void refreshAppView() {
         if (appViewGroup.getSelectedToggle().equals(appViewWeekRadio)) {
             filterWeek();
@@ -133,7 +140,11 @@ public class MainController implements Initializable {
         }
     }
 
-    public void deleteAppHandler(ActionEvent actionEvent) {
+    /**
+     * First prompts user to confirm deletion. Then, passes the selected appointment into AppointmentDao.deleteAppointment
+     * to perform deletion. On successful deletion, displays custom message in appStatusLabel to notify user deletion
+     * was successful.*/
+    public void deleteAppHandler() {
         if (AlertUtil.confirmDeletion()){
             Appointment appointment;
             try {
@@ -142,15 +153,15 @@ public class MainController implements Initializable {
                     filter();
                     appStatusLabel.setText(appointment.toString() + " was successfully deleted.");
                     appStatusLabel.setTextFill(Color.color(0,1,0));
-                } else {
-
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("No appointment selected.");
             }
         }
     }
 
+    /**
+     * Displays the add customer form.*/
     public void addCustomerHandler(ActionEvent actionEvent) {
         //AddCustomerController addCustomerController = new AddCustomerController(customers);
         JavaFXUtil.showAddCustomerWindow(actionEvent,
@@ -158,21 +169,26 @@ public class MainController implements Initializable {
                 customers);
     }
 
+    /**
+     * Displays the modify customer form. Uses try/catch in case user clicks modify button without having selected a
+     * customer in the table view.*/
     public void modifyCustomerHandler(ActionEvent actionEvent) {
         Customer customer;
         try {
-            customer = (Customer)customerTableView.getSelectionModel().getSelectedItem();
+            customer = customerTableView.getSelectionModel().getSelectedItem();
             JavaFXUtil.showModifyCustomerWindow(actionEvent,
                     "/sample/view/customerViews/modifyCustomerForm.fxml", customers, customer);
         } catch (Exception e) {
-            System.out.println("No customer selected.");;
+            System.out.println("No customer selected.");
         }
-
-       /* JavaFXUtil.showNewWindow(actionEvent,
-                "/sample/view/customerViews/modifyAppointmentForm.fxml");*/
     }
 
-    public void deleteCustomerHandler(ActionEvent actionEvent) {
+    /**
+     * First prompts user to confirm deletion. Then, checks whether the customer has any associated appointments. If so,
+     * A warning is displayed informing the user that these appointments must first be deleted to proceed. If the user
+     * clicks yes, all of the associated appointments are deleted, then the customer is deleted. Custom message is
+     * displayed in customerStatusLabel informing user that the deletion was successful.*/
+    public void deleteCustomerHandler() {
         if(AlertUtil.confirmDeletion()) {
             Customer customer;
             try {
@@ -202,18 +218,26 @@ public class MainController implements Initializable {
         }
     }
 
-    public void viewAllHandler(ActionEvent actionEvent) {
+    /**
+     * Calls appropriate filter method on toggle selection.*/
+    public void viewAllHandler() {
         filterAll();
     }
 
-    public void viewWeekHandler(ActionEvent actionEvent) {
+    /**
+     * Calls appropriate filter method on toggle selection.*/
+    public void viewWeekHandler() {
         filterWeek();
     }
 
-    public void viewMonthHandler(ActionEvent actionEvent) {
+    /**
+     * Calls appropriate filter method on toggle selection.*/
+    public void viewMonthHandler() {
        filterMonth();
     }
 
+    /**
+     * Checks which appointment view toggle is selected, then calls the appropriate filter function.*/
     private void filter() {
         RadioButton selectedView = (RadioButton)appViewGroup.getSelectedToggle();
         if (selectedView.equals(appViewAllRadio)) {
@@ -225,11 +249,15 @@ public class MainController implements Initializable {
         }
     }
 
+    /**
+     * Displays all appointments from the database in the table view.*/
     private void filterAll() {
         appointments = AppointmentDao.getAllAppointments();
         appTableView.setItems(appointments);
     }
 
+    /**
+     * Displays only appointments from Sunday to Saturday of the current week.*/
     private void filterWeek() {
         DayOfWeek firstDayOfWeek = DayOfWeek.SUNDAY;
         DayOfWeek lastDayOfWeek = DayOfWeek.SATURDAY;
@@ -238,6 +266,8 @@ public class MainController implements Initializable {
         appTableView.setItems(AppointmentDao.getAppointmentsInDateRange(firstDateOfWeek, lastDateOfWeek));
     }
 
+    /**
+     * Displays only appointments from the first day of the month to the last day of the month of the current month.*/
     private void filterMonth() {
         LocalDate date = now();
         LocalDate firstDayOfMonth = date.withDayOfMonth(1);
@@ -245,8 +275,11 @@ public class MainController implements Initializable {
         appTableView.setItems(AppointmentDao.getAppointmentsInDateRange(firstDayOfMonth, lastDayOfMonth));
     }
 
-    public void selectReportHandler(ActionEvent actionEvent) {
-        Report selection = ((ComboBox<Report>) actionEvent.getSource()).getSelectionModel().getSelectedItem();
+    /**
+     * Calls appropriate onSelectReport method for selected Report subclass via ReportListener functional interface.
+     * Each report subclass needs to perform different functions on selection.*/
+    public void selectReportHandler() {
+        Report selection = reportTypeCombo.getSelectionModel().getSelectedItem();
         selection.getOnSelection().onSelectReport();
     }
 }

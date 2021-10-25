@@ -5,7 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import sample.dao.UserDao;
 import sample.model.AppointmentType;
@@ -16,12 +19,14 @@ import sample.util.report.Report;
 import sample.util.report.TypeMonthReport;
 import sample.util.report.UserActivityReport;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -37,6 +42,16 @@ public class LoginController implements Initializable {
 
     private ResourceBundle rb;
 
+    /**
+     * First, attempts to get the resource bundle based on system locale. Because the only properties file is for french,
+     * this will fail if the user's system is set to English(or any other language), and thus, everything will remain
+     * in English. If getBundle succeeds, translation to french is performed.
+     *<br>
+     * ~~LAMBDA EXPRESSION~~
+     * <br>
+     * Implements the runnable interface via lambda expression for threading. Initializes an ObservableList
+     * of appointment types and stores it in the static member variable of AppointmentType class for populating
+     * combo boxes in the main program. Also initializes reports ObservableList.*/
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -53,12 +68,7 @@ public class LoginController implements Initializable {
             localIdLabel.setText(localIdLabel.getText() + " " + ZoneId.systemDefault());
         }
 
-        /**
-         * ~~LAMBDA EXPRESSION~~
-         * <br>
-         * Implements the runnable interface via lambda expression for threading. Initializes an ObservableList
-         * of appointment types and stores it in the static member variable of AppointmentType class for populating
-         * combo boxes in the main program.*/
+
         Runnable runnable = () -> {
             System.out.println("I'm in a thread!");
             ObservableList<AppointmentType> appTypes = FXCollections.observableArrayList();
@@ -81,6 +91,10 @@ public class LoginController implements Initializable {
         initAppTypesThread.start();
     }
 
+    /**
+     * Grabs values from username and password fields and queries the database via UserDao.checkCredentials.
+     * If the credentials are valid, the main menu is rendered. If not, an error alert is displayed. The locale is passed
+     * into the AlertUtil.showInvaidCredentialsAlert so translation can be performed on the alert if necessary.*/
     public void attemptLoginHandler(ActionEvent actionEvent) {
         boolean credentialsValid = UserDao.checkCredentials(usernameField.getText(), passwordField.getText());
         passwordField.clear();
@@ -97,8 +111,10 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Handles translating JavaFX nodes to French. Admittedly, this method is a bit silly(I could
+     * have just manually set all elements), but it was fun to write!*/
     private void translate(ObservableList<Node> nodes) {
-
         for (Node node : nodes) {
             try {
                 VBox vbox = (VBox) node;
@@ -121,21 +137,30 @@ public class LoginController implements Initializable {
         }
     }
 
+    /**
+     * Helper method for translate.*/
     private void tryLabel(Node node) throws ClassCastException {
         Label label = (Label) node;
         label.setText(rb.getString(label.getText()));
     }
 
+    /**
+     * Helper method for translate.*/
     private void tryTextField (Node node) throws ClassCastException {
         TextField textField = (TextField) node;
         textField.setPromptText(rb.getString(textField.getPromptText()));
     }
 
+    /**
+     * Helper method for translate.*/
     private void tryButton (Node node) throws ClassCastException {
         Button button = (Button) node;
         button.setText(rb.getString(button.getText()));
     }
 
+    /**
+     * Writes to Login_Summary.txt to keep track of all login attempts. Logs system time, time zone, the username
+     * entered, and whether the attempt was successful.*/
     private void writeLoginAttempt(boolean success) throws IOException {
         File file = new File("Login_Summary.txt");
         ZonedDateTime time = ZonedDateTime.now();

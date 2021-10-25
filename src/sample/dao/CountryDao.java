@@ -8,8 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Handles sending queries and updates to the countries table in the database.*/
 public class CountryDao {
 
+    /**
+     * Queries the database and builds an observable list of all the country records.
+     * @return An observable list of country objects.*/
     public static ObservableList<Country> getAllCountries () {
         ObservableList<Country> countries = FXCollections.observableArrayList();
         try {
