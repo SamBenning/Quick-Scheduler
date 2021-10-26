@@ -213,4 +213,10 @@ public final class QueryUtil {
         return getDeleteCustomerPreparedStatement;
     }
 
+    public static PreparedStatement getUpcomingAppointmentsPreparedStatement(LocalDateTime now, LocalDateTime nowPlusFifteen) throws SQLException {
+        getAppointmentInDateRange.setTimestamp(1, Timestamp.valueOf(now));
+        getAppointmentInDateRange.setTimestamp(2, Timestamp.valueOf(nowPlusFifteen));
+        return getAppointmentInDateRange;
+    }
+
 }

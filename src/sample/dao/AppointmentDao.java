@@ -136,6 +136,26 @@ public final class AppointmentDao {
     }
 
     /**
+     * Queries the database and builds and observable list of appointment records whose start time is within 15
+     * minutes of the LocalDateTime passed in.
+     * @param now Intended to be a LocalDateTime which is the result of calling LocalDateTime.now from the method calling this.*/
+    public static ObservableList<Appointment> getUpcomingAppointments(LocalDateTime now) {
+        ObservableList<Appointment> upcomingAppointments = FXCollections.observableArrayList();
+        LocalDateTime fifteenMinutesFromNow = now.plusMinutes(15);
+        try {
+            PreparedStatement preparedStatement = QueryUtil.getUpcomingAppointmentsPreparedStatement(now, fifteenMinutesFromNow);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Appointment appointment = generateAppointment(resultSet);
+                upcomingAppointments.add(appointment);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return upcomingAppointments;
+    }
+
+    /**
      * Queries the database for a count of appointments of a given type occurring in a given month. In order to obtain a
      * count not limited to the current year, this method loops from 2000 to 2100 and inputs the iteration value as the year
      * into the query, effectively obtaining a count including every year within that range.

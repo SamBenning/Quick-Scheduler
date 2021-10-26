@@ -2,7 +2,9 @@ package sample.util;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import sample.model.Appointment;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -60,6 +62,33 @@ public abstract class AlertUtil {
         Alert alert = new Alert(Alert.AlertType.ERROR, alertString, ButtonType.OK);
         alert.setTitle(title);
         alert.setHeaderText(header);
+        alert.showAndWait();
+    }
+
+    /**
+     * Displays a customer information alert based on an appointment instance.
+     * @param appointment An appointment instance used to generate customer message.*/
+    public static void showUpcomingAppointment(Appointment appointment) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        String alertString = "ID: " + appointment.getAppointmentId() +
+                "\nTitle: " + appointment.getTitle() +
+                "\nDescription: " + appointment.getDescription() +
+                "\nStart Time: " + appointment.getStart().format(formatter) +
+                "\nEnd Time: " + appointment.getEnd().format(formatter);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, alertString, ButtonType.OK);
+        alert.setTitle("Welcome!");
+        alert.setHeaderText("A scheduled appointment will begin soon!");
+        alert.showAndWait();
+    }
+
+    /**
+     * Overloaded method to handle showing an alert when no upcoming appointments are found.*/
+    public static void showUpcomingAppointment() {
+        String alertString = "Scheduled appointments can be viewed in the Appointments tab.";
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, alertString, ButtonType.OK);
+        alert.setTitle("Welcome!");
+        alert.setHeaderText("You do not have any appointments within the next 15 minutes.");
         alert.showAndWait();
     }
 }

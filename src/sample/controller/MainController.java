@@ -93,11 +93,29 @@ public class MainController implements Initializable {
         customerPhoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
         customerDivisionCol.setCellValueFactory(new PropertyValueFactory<>("divisionId"));
 
-
         appViewGroup.selectToggle(appViewAllRadio);
         reportTypeCombo.setItems(Report.getReports());
         Report.setDynamicComboArea(reportDynamicComboArea);
         Report.setDynamicTableArea(reportDynamicTableArea);
+
+        checkUpcomingAppointments();
+
+    }
+
+    /**
+     * Grabs the the local system time and queries the database for appointments within 15 minutes of that time.
+     * If no results, displays an alert informing user there are no upcoming appointments. If results are found, loops
+     * through all results, displaying a custom alert for each one.*/
+    private void checkUpcomingAppointments() {
+        LocalDateTime now = LocalDateTime.now();
+        ObservableList<Appointment> upcoming = AppointmentDao.getUpcomingAppointments(now);
+        if (upcoming.isEmpty()) {
+            AlertUtil.showUpcomingAppointment();
+        } else {
+            for (Appointment appointment : upcoming) {
+                AlertUtil.showUpcomingAppointment(appointment);
+            }
+        }
     }
 
     /**
