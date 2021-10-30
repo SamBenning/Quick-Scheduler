@@ -52,8 +52,8 @@ public class ModifyAppointmentController extends AppointmentController implement
         appTitleField.setText(selectedAppointment.getTitle());
         appDescriptionField.setText(selectedAppointment.getDescription());
         appLocationField.setText(selectedAppointment.getLocation());
-        appTypeCombo.getSelectionModel().select(new AppointmentType(selectedAppointment.getType()));
         appIdField.setText(Integer.toString(selectedAppointment.getAppointmentId()));
+        selectInitialType();
         selectInitialCustomer();
         selectInitialUser();
         selectInitialContact();
@@ -124,6 +124,17 @@ public class ModifyAppointmentController extends AppointmentController implement
         }
         String selection = idToContactMap.get(selectedAppointment.getContactId());
         appContactCombo.getSelectionModel().select(selection);
+    }
+
+    private void selectInitialType() {
+        for (AppointmentType type: AppointmentType.getAllTypes()) {
+            if (type.getName().equals(selectedAppointment.getType())) {
+                appTypeCombo.getSelectionModel().select(type);
+            }
+        }
+        if (appTypeCombo.getSelectionModel().isEmpty()) {
+            appTypeCombo.getSelectionModel().select(new AppointmentType("SELECT VALID TYPE"));
+        }
     }
 
     /**

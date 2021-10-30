@@ -162,7 +162,7 @@ public class LoginController implements Initializable {
      * Writes to Login_Summary.txt to keep track of all login attempts. Logs system time, time zone, the username
      * entered, and whether the attempt was successful.*/
     private void writeLoginAttempt(boolean success) throws IOException {
-        File file = new File("Login_Summary.txt");
+        File file = new File("login_activity.txt");
         ZonedDateTime time = ZonedDateTime.now();
         PrintWriter printWriter = new PrintWriter(new FileOutputStream(file, true));
         printWriter.append("\n" + time.format(DateTimeFormatter.ISO_ZONED_DATE_TIME));

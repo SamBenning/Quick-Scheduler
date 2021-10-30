@@ -154,6 +154,9 @@ public abstract class ValidationUtil {
         int setStartHour = controller.getStartDateTime().getHour();
         if (setStartHour < startHour || setStartHour >= endHour) {
             errorMessageToDisplay += "\n-Invalid start time--outside of business hours.";
+
+
+
             return false;
         }
         return true;
@@ -167,11 +170,12 @@ public abstract class ValidationUtil {
         if (controller.hasEmptyDateTimeCombo()) {return false;}
         int setEndMinute = controller.getEndDateTime().getMinute();
         int setEndHour = controller.getEndDateTime().getHour();
-        if (setEndHour <= startHour || setEndHour > endHour) {
-            errorMessageToDisplay += "\n-Invalid end time--outside of business hours.";
+        if (setEndHour < startHour || setEndHour > endHour) {
             return false;
         } else if (setEndHour == endHour && setEndMinute != 0) {
             errorMessageToDisplay += "\n-Invalid end time--outside of business hours.";
+            System.out.println("endHour: " + endHour);
+            System.out.println("setEndHour: " + setEndHour);
             return false;
         }
         return true;
@@ -226,20 +230,21 @@ public abstract class ValidationUtil {
      * record in the database for itself.*/
     private static boolean validateCustomerConflicts(AppointmentController controller) {
 
-        Instant startTimeInstant = controller.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant();
-        long startTimeMillis = startTimeInstant.toEpochMilli();
-        Instant endTimeInstant = controller.getEndDateTime().atZone(ZoneId.systemDefault()).toInstant();
-        long endTimeMillis = endTimeInstant.toEpochMilli();
-        ArrayList<Appointment> matchingCustomerAppointments = AppointmentDao.getAppointmentsForCustomer(controller.getSelectedCustomerId());
+        try {
+            Instant startTimeInstant = controller.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant();
+            long startTimeMillis = startTimeInstant.toEpochMilli();
+            Instant endTimeInstant = controller.getEndDateTime().atZone(ZoneId.systemDefault()).toInstant();
+            long endTimeMillis = endTimeInstant.toEpochMilli();
+            ArrayList<Appointment> matchingCustomerAppointments = AppointmentDao.getAppointmentsForCustomer(controller.getSelectedCustomerId());
 
-        for (Appointment appointment : matchingCustomerAppointments) {
-            try {
-                ModifyAppointmentController modController = (ModifyAppointmentController) controller;
-                if (appointment.getAppointmentId() == modController.getSelectedAppointment().getAppointmentId()) {
-                    continue;
+            for (Appointment appointment : matchingCustomerAppointments) {
+                try {
+                    ModifyAppointmentController modController = (ModifyAppointmentController) controller;
+                    if (appointment.getAppointmentId() == modController.getSelectedAppointment().getAppointmentId()) {
+                        continue;
+                    }
+                } catch (Exception ignored) {
                 }
-            } catch (Exception ignored) {
-            }
                 Instant appStartInstant = appointment.getStart().atZone(ZoneId.systemDefault()).toInstant();
                 long appStartMillis = appStartInstant.toEpochMilli();
                 Instant appEndInstant = appointment.getEnd().atZone(ZoneId.systemDefault()).toInstant();
@@ -249,10 +254,15 @@ public abstract class ValidationUtil {
                     System.out.println("conflict w/ this app: " + appointment.getAppointmentId());
                     errorMessageToDisplay += "\n-Selected customer already has appointment scheduled for date/time range.";
                     return false;
+                }
             }
+            return true;
+        } catch (NullPointerException e) {
+            return false;
+        }
 
-            }
-        return true;
+
+
     }
 
     /**

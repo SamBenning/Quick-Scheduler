@@ -123,6 +123,6 @@ public class Appointment {
 
     @Override
     public String toString() {
-        return "Appointment " + title + " (ID: " + appointmentId + ") was successfully deleted.";
+        return "Title: " + title + " ID: " + appointmentId + " Type: " + type;
     }
 }

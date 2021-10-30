@@ -34,7 +34,7 @@ public abstract class AlertUtil {
 
     /**
      * Shows a confirmation alert prompting user to confirm a deletion operation.
-     * @return. Returns true if user selects yes, false otherwise.*/
+     * @return Returns true if user selects yes, false otherwise.*/
     public static boolean confirmDeletion() {
         String alertString = "Are you sure you wish to delete the selected item?";
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, alertString, ButtonType.YES, ButtonType.NO);
@@ -53,7 +53,7 @@ public abstract class AlertUtil {
         String title = "Error";
         String header = "Invalid username or password";
         String alertString = "Please make sure you entered your log-in credentials correctly.";
-        if (locale.equals(Locale.FRENCH)) {
+        if (locale.getLanguage().equals(Locale.FRENCH.getLanguage())) {
             title = rb.getString(title);
             header = rb.getString(header);
             alertString = rb.getString(alertString);
